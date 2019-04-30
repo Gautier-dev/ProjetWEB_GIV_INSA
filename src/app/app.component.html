@@ -1,139 +1,20 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
   <h1>
-    Welcome to {{ title }}!
+    Welcome to Angular + Python + Flask Demo!
   </h1>
-  <img width="300" alt="angular-logo" src="">
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
-<p> wefejgeijg
-gergneoigh
-ergjkbreigu
-\ergjberhiguh
-\ergherbiugh
-  <app-heroes></app-heroes> <br>
-erguheiuh
-eguerhioh
-erguheioreg
-uerghoirehg
-erguheiugerh
-greuihiouergh
-ergiuhgeriuh
-reghgiuergh
-erguhirugeh <br>
-fwewefew
-wfe
-  erguhirugeh <br>
-  fwewefew
-  wfe
-  erguhirugeh <br>
-  fwewefew
-  wfe
-  erguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfe
-  erguhirugeh <br>
-  fwewefew
-  wfe
-  erguhirugeh <br>
-  fwewefew
-  wfe
-  erguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfeerguhirugeh <br>
-  fwewefew
-  wfevverguhirugeh <br>
-  fwewefew
-  wfe
+<div>
+  <button (click)="sayHi()">Say Hi</button>
+  <span>Server data: {{serverData | json}}</span>
+</div>
 
+<div>
+  <button (click)="getAllEmployees()">All Employees</button>
+  <span>All Employee data: {{employeeData | json}}</span>
+</div>
 
-
-
-
-
-
-
-
-
-
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-
-
-
-
-
-
-
-
-
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-
-
-
-
-
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-
-
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-
-  erguhirugeh <br>
-  fwewefew
-  wfe
-  erguhirugeh
-  fwewefew
-  wfe
-  <br><br><br><br><br><br><br><br><br>
-  <br><br><br><br><br><br><br><br><br>
-
-
-
-
-</p>
-
+<div>
+  <button (click)="getEmployee()">Employees By ID</button>
+  <span>Employee data: {{employee | json}}</span>
+</div>
