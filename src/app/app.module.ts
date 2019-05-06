@@ -7,14 +7,16 @@ import {HttpClientModule} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { AccueilComponent } from './accueil/accueil.component';
 import { AddAnnonceComponent } from './add-annonce/add-annonce.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule} from '@angular/forms';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListeUtilisateursComponent,
     AccueilComponent,
-    AddAnnonceComponent
+    AddAnnonceComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
