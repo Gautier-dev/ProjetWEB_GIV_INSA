@@ -1,0 +1,77 @@
+<p>
+  Veuillez entrer les détails de votre annonce :<br>
+  TEMPORAIRE : username : <input [(ngModel)]="username" placeholder="username"><br>
+  TEMPORAIRE : arrondissement : <input [(ngModel)]="arrondissement" placeholder="arrondissement"><br>
+  TEMPORAIRE : quartier : <input [(ngModel)]="quartier" placeholder="quartier"><br><br>
+
+  Nom de l'annonce : <input [(ngModel)]="titre" placeholder="titre"><br>
+  Description de l'annonce : <input [(ngModel)]="description" placeholder="description"><br><br>
+
+  Choix de la portée de l'annonce :<br>
+</p>
+
+  <form name="portée">
+    <label>
+      <input [(ngModel)]="scale" type="radio" value="1" [ngModelOptions]="{standalone: true}">
+      Quartier
+    </label><br/>
+    <label>
+      <input [(ngModel)]="scale" type="radio" value="2" [ngModelOptions]="{standalone: true}">
+      Arrondissement
+    </label><br/>
+    <label>
+      <input [(ngModel)]="scale" type="radio" value="3" [ngModelOptions]="{standalone: true}">
+      Lyon
+    </label><br/>
+  </form>
+
+<p>Choix de la catégorie : </p>
+
+<form name="intérêt">
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="1" [ngModelOptions]="{standalone: true}">
+    Textile
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="2" [ngModelOptions]="{standalone: true}">
+    Mobilier
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="3" [ngModelOptions]="{standalone: true}">
+    Electroménager
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="4" [ngModelOptions]="{standalone: true}">
+    Alimentaire
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="5" [ngModelOptions]="{standalone: true}">
+    Jouets
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="6" [ngModelOptions]="{standalone: true}">
+    Jeux vidéos
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="7" [ngModelOptions]="{standalone: true}">
+    Décoratif
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="8" [ngModelOptions]="{standalone: true}">
+    Récup'
+  </label><br/>
+  <label>
+    <input [(ngModel)]="numInteret" type="radio" value="9" [ngModelOptions]="{standalone: true}">
+    Livres
+  </label><br/>
+</form>
+
+<p>
+  Résumé :<br>
+  {{titre}} : {{description}}<br>
+  {{scale}},{{numInteret}}<br>
+  {{status}}
+</p>
+
+<button (click)="post()">Cliquez ici pour publier l'annonce.</button>
+
