@@ -1,0 +1,55 @@
+<div class="container">
+  <form action="login.php" style="border:1px solid #ccc;">
+    <p style="text-align: center;">Vous avez déjà un compte ?</p>
+    <h1 style="text-align: center;">Se connecter</h1>
+    <hr>
+
+    <label for="email" style="padding: 10px;"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" id="email1" required>
+
+    <label for="psw" style="padding: 10px;"><b>Mot de passe</b></label>
+    <input type="password" placeholder="Enter Password" id="psw1" required>
+
+    <label style="padding: 10px">
+      <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px;"> Se souvenir de moi
+    </label>
+
+    <br>
+
+    <label for="pswerror" id="pswerror1" style="color:red; padding: 10px"><b></b></label>
+
+    <div class="clearfix">
+      <button type="submit" class="connectbtn" (click)="connect()">Se connecter</button>
+    </div>
+</form>
+
+  <form action="signup.php" style="border:1px solid #ccc">
+    <p style="text-align: center;">Nouvel utilisateur ?</p>
+    <h1 style="text-align: center;">S'inscrire</h1>
+    <hr>
+
+    <label for="email" style="padding: 10px;"><b>Email</b></label>
+    <input type="text" placeholder="Enter Email" id="email" required>
+
+    <label for="psw" style="padding: 10px;"><b>Mot de passe</b></label>
+    <input type="password" placeholder="Enter Password" id="psw" required>
+
+    <label for="psw-repeat" style="padding: 10px;"><b>Confirmer le mot de passe</b></label>
+    <input type="password" placeholder="Repeat Password" id="psw-repeat" required>
+
+    <label style="padding: 10px">
+      <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Se souvenir de moi
+    </label>
+
+    <br>
+
+    <label for="pswerror" id="pswerror" style="color:red"><b></b></label>
+
+    <p style="text-align: center">En créant un compte, vous acceptez nos <a href="#" style="color:dodgerblue;">Termes & Conditions</a>.</p>
+
+    <div class="clearfix">
+      <button type="reset" class="cancelbtn" (click)="cancel()">Annuler</button>
+      <button type="submit" class="signupbtn" (click)="submit()">S'inscrire</button>
+    </div>
+</form>
+</div>
