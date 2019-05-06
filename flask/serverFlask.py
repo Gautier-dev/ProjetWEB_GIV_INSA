@@ -22,7 +22,7 @@ class Database:
         self.cur = self.con.cursor()
 
     #METHODES D'ACCES A LA BASE DE DONNEES
-
+    
     def list_users(self):
         #Récupérer la liste des utilisateurs
         self.cur.execute("SELECT * FROM utilisateurs")
@@ -40,13 +40,23 @@ class Database:
         self.con.commit()
         # Rien à retourner
 
+    def query(self, sql, args=None):
+            try:
+                cursor = self.conn.cursor()
+                cursor.execute(sql, args)
+            except (AttributeError, pymysql.OperationalError): # gerer les erreurs
+                #__init__()
+                cursor = self.conn.cursor()
+                cursor.execute(sql, args)
+            return cursor #fetchall pour retourner des tuples
 
+"""
 class Utilisateurs(Resource):
     def get(self):
         db = Database()
         emps = db.list_users()
         json = jsonify(emps)
-        return json
+        return json """
 
 class Annonce(Resource):
   def post(self):
@@ -56,12 +66,44 @@ class Annonce(Resource):
         db.add_announcement(args["idUser"],args["idInteret"],args["description"],args["title"],args["scale"])
         return 200
 
+class login(Resource):
+  def get(self):
+    message = None
+    global notifications
+    if notifications:
+      message = notifications
+      notifications = None
+    if 'idUser' not in session:
+      message = {'message': 'Please log in', 'type': 'warning'}
+      return jsonify("/login")# URL de login a utiliser sur angular
+
+    return jsonify("envoie des donnees de l'utilisateur")# Si l'utilisateur est dans la session
+
+class Utilisateurs(Resource):
+  def get(self):
+    message = None
+    global notifications
+    if notifications:
+      message = notifications
+      notifications = None
+    if 'idUser' not in session:
+      notifications = {'message': 'Please log in', 'type': 'warning'}
+      return jsonify("/login")
+    if session['idUser'] != 'admin':
+      return jsonify("PageErreurAdmin")
+    db = Database()
+    users = Users.getUsers(db)
+    if not users:
+      notifications = {'message': 'Failed to retrieve users', 'type': 'error'}
+      return jsonify("PageErreurPasUser")
+    return jsonify(users)
+
 
 
 
 api.add_resource(Utilisateurs, '/utilisateurs') # Route_1
 api.add_resource(Annonce,"/annonces") # Route 2
-
+api.add_resource(login, '/login')
 
 if __name__ == '__main__':
      app.run(port=5002)
