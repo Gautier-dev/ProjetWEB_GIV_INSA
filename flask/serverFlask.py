@@ -37,6 +37,7 @@ class Database:
         ) #Le 1 à la fin indique que l'annonce est active.
         data = (idUser,idInteret,description,title,scale)
         self.cur.execute(insert_stmt, data)
+        self.con.commit()
         # Rien à retourner
 
 
