@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Location } from "@angular/common";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-annonce',
@@ -24,13 +24,18 @@ export class AddAnnonceComponent implements OnInit {
   titre = '';
   scale = '';
   status = 0;
+  interests = [];
 
 
   constructor(private httpClient: HttpClient, private router: Router, private location: Location) {
   }
 
   ngOnInit() {
+    this.httpClient.get('http://127.0.0.1:5002/interests').subscribe(data => {
+      this.interests = data as [JSON];
+    });
   }
+
 
   post() {
     const data = {
