@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from json import dumps
 from flask_jsonpify import jsonify
 import pymysql
+import lib.Users as Users
 
 app = Flask(__name__)
 api = Api(app)
@@ -20,6 +21,8 @@ class Database:
         self.con = pymysql.connect(host=host, user=user, password=password, db=db, cursorclass=pymysql.cursors.
                                    DictCursor)
         self.cur = self.con.cursor()
+        self.con.autocommit(True)
+        self.con.set_character_set('utf8')
 
     #METHODE D'ACCES A LA BASE DE DONNEES
 
@@ -42,6 +45,21 @@ class Utilisateurs(Resource):
         emps = cursor.fetchall()
         json = jsonify(emps)
         return json
+
+def users():
+    message = None
+    global notifications
+    if notifications:
+        message = notifications
+        notifications = None
+        """
+    if 'username' not in session:
+        notifications = {'message': 'Please log in', 'type': 'warning'}
+        return jsonify("/login")
+        """
+    db = Database()
+    users = Users.getUsers(db)
+    return jsonify(users)
 
 class Annonce(Resource):
   def post(self):
@@ -79,7 +97,7 @@ class Interets(Resource):
 
 
 #Attribution des classes aux routes
-api.add_resource(Utilisateurs, '/utilisateurs')
+api.add_resource(users, '/utilisateurs') # test fct
 api.add_resource(Annonce,"/annonces")
 api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
