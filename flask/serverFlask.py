@@ -47,6 +47,9 @@ class Database:
         cursor.execute(sql, args)
     return cursor #fetchall pour retourner des tuples / commit pour mettre à jour la db
 
+class ServerError(Exception):
+    pass
+
 def registerUser(db, form, ROUNDS):
   error = None
   username = form['idUser']
@@ -64,6 +67,28 @@ def registerUser(db, form, ROUNDS):
     return None
   else:
     return "User exists"
+
+def loginForm(db, form):
+    error = None
+    try:
+        idUser = form['idUser']
+        cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [idUser])  # verifier []
+
+        if not cur.fetchone()[0]:
+            raise ServerError('Incorrect username / password')
+
+        password = form['password']
+        cur = db.query("SELECT password FROM utilisateurs WHERE idUser = %s", [idUser])
+
+        for row in cur.fetchall():
+            if bcrypt.hashpw(password.encode('utf-8'), row[0]) == row[0]:  # TODO : voir
+                session['idUser'] = form['idUser']  # on associe idUser a sa valeur dans une session, si la session est modifiee session.modified = True
+            return error
+
+        raise ServerError('Incorrect username / password')
+    except ServerError as e:
+        error = str(e)
+        return error
 
 
 #DEFINITION DES DIFFERENTES CLASSES POUR L'ACCES A LA BASE DE DONNEES
@@ -101,20 +126,17 @@ class Annonce(Resource):
 
 
 class Login(Resource):
-  def get(self):
+  def post(self):
     """
-    Commande GET à la route /login
+    Commande POST à la route /login
     :return: données de l'utilisateurs ou warning si non connecté
     """
-    message = None
-    global notifications
-    if notifications:
-      message = notifications
-      notifications = None
-    if 'idUser' not in session:  #Si utilisateur non connecté
-      message = {'message': 'Please log in', 'type': 'warning'}
-      return jsonify("/login")  # URL de login a utiliser sur angular
-    return jsonify("envoie des donnees de l'utilisateur")  # Si l'utilisateur est dans la session
+    db = Database()
+    result = loginForm(db, request.get_json())
+    if not result:
+        return True
+    else:
+        return False
 
 class Interets(Resource):
   def get(self):
@@ -136,7 +158,7 @@ class Register(Resource):
     :return: ffff
     """
     db = Database()
-    result = registerUser(db,request.get_json(),10)  #10 = cryptage
+    result = registerUser(db, request.get_json(), 10)  #10 = cryptage
     if not result:
       return True
     else:
