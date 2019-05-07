@@ -74,14 +74,14 @@ def loginForm(db, form):
         idUser = form['idUser']
         cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [idUser])  # verifier []
 
-        if not cur.fetchone()[0]:
+        if not cur.fetchone()['COUNT(*)']:
             raise ServerError('Incorrect username / password')
 
         password = form['password']
         cur = db.query("SELECT password FROM utilisateurs WHERE idUser = %s", [idUser])
 
         for row in cur.fetchall():
-            if bcrypt.hashpw(password.encode('utf-8'), row[0]) == row[0]:  # TODO : voir
+            if bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(10)) == row['password']:
                 session['idUser'] = form['idUser']  # on associe idUser a sa valeur dans une session, si la session est modifiee session.modified = True
             return error
 
@@ -154,21 +154,24 @@ class Interets(Resource):
 class Register(Resource):
   def post(self):
     """
-
-    :return: ffff
+    Commande POST à la route /signup
+    :return: True ou False en fonction du résultat
     """
-    db = Database()
-    result = registerUser(db, request.get_json(), 10)  #10 = cryptage
-    if not result:
-      return True
-    else:
+    try:
+      db = Database()
+      result = registerUser(db,request.get_json(),10)  #10 = cryptage
+      if not result:
+        return True
+      else:
+        return False
+    except:
       return False
 
 class Quartiers(Resource):
   def get(self):
     """
-
-    :return:
+    Commmande GET à la route /quartiers
+    :return: le json de la table quartiers
     """
     db = Database()
     cursor = db.query("SELECT * FROM quartiers")
