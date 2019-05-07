@@ -7,6 +7,7 @@ import { AccueilComponent } from '../accueil/accueil.component';
 import { AddAnnonceComponent } from "../add-annonce/add-annonce.component";
 import { SignupComponent} from "../signup/signup.component";
 import { UserpageComponent } from "../userpage/userpage.component"
+import { ViewAnnoncesComponent } from '../view-annonces/view-annonces.component';
 
 
 const routes: Routes = [
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path: '', component: AccueilComponent},
   {path: 'annonces/add', component: AddAnnonceComponent},
   {path: 'signup', component: SignupComponent},
-  {path: 'utilisateurs/:id', component: UserpageComponent}
+  {path: 'utilisateurs/:id', component: UserpageComponent},
+  {path: 'annonces/view', component: ViewAnnoncesComponent}
 ];
 
 @NgModule({
