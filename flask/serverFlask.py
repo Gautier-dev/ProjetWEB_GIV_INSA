@@ -55,10 +55,10 @@ def registerUser(db, form, ROUNDS):
 
   password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(ROUNDS))
 
-  cur = db.query("SELECT COUNT(*) FROM users WHERE user = %s", [username])
+  cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [username])
   c = cur.fetchone()
-  if c[0] == 0:
-    cur = db.query("INSERT INTO utilisateur (`idUser`, `mail`, `password`) VALUES (%s,%s,%s)",
+  if c['COUNT(*)'] == 0:
+    cur = db.query("INSERT INTO utilisateurs (`idUser`, `mail`, `password`, `idQuartier`) VALUES (%s,%s,%s,'Part-Dieu')",
                    [username, email, password])
     return None
   else:
@@ -135,7 +135,7 @@ class Register(Resource):
     :return: ffff
     """
     db = Database()
-    result = registerUser(db,request.form,10) #10 = cryptage
+    result = registerUser(db,request.get_json(),10)  #10 = cryptage
     if not result:
       return True
     else:

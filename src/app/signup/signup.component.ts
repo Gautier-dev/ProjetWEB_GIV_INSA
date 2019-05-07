@@ -50,26 +50,23 @@ export class SignupComponent implements OnInit {
       (document.getElementById('psw-repeat') as HTMLInputElement).value = '';
     }
     const data = {
-      pseudo,
-      email,
-      psw
+      idUser: pseudo,
+      mail: email,
+      password: psw
     };
     this.httpClient.post('http://127.0.0.1:5002/signup', data, this.httpOptions).subscribe(res => {
       this.registerStatus = res as boolean;
+      switch (this.registerStatus) {
+        case true: {
+          (document.getElementById('pseudo1') as HTMLInputElement).value = 'Inscription réussie';
+          break;
+        }
+        case false: {
+          (document.getElementById('pseudo1') as HTMLInputElement).value = 'Je n\'ai pas réussi à t\'inscrire je suis désolé(e) :(';
+          break;
+        }
+      }
     });
-    switch (this.registerStatus) {
-      case true: {
-        (document.getElementById('pseudo1') as HTMLInputElement).value = 'Connection successfoule';
-        break;
-      }
-      case false: {
-        (document.getElementById('pseudo1') as HTMLInputElement).value = 'Connection failed';
-        break;
-      }
-      default: {
-        (document.getElementById('pseudo1') as HTMLInputElement).value = 'No info';
-        break;
-      }
-    }
+
   }
 }
