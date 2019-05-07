@@ -9,13 +9,13 @@ def loginForm(db, form):
     error = None
     try:
         idUser = form['idUser']
-        cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE nom = %s", [idUser])# verifier []
+        cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [idUser])# verifier []
 
         if not cur.fetchone()[0]:
             raise ServerError('Incorrect username / password')
 
         password = form['password']
-        cur = db.query("SELECT password FROM utilisateurs WHERE nom = %s", [idUser])
+        cur = db.query("SELECT password FROM utilisateurs WHERE idUser = %s", [idUser])
 
         for row in cur.fetchall():
             if bcrypt.hashpw(password.encode('utf-8'), row[0]) == row[0]: #TODO : voir
@@ -43,6 +43,7 @@ def registerUser(db, form, ROUNDS):
       c = cur.fetchone()
       if c[0] == 0:
         cur = db.query("INSERT INTO utilisateur (`idUser`, `mail`, `password`) VALUES (%s,%s,%s)", [username, email, password])
+        cur.commit()
         return None
       else:
         return "User exists"
@@ -65,7 +66,7 @@ def getUsers(db):
 def deleteUser(db, user):
     error = None
     try:
-      cur = db.query("DELETE FROM utilisateur WHERE nom = %s", [user])
+      cur = db.query("DELETE FROM utilisateur WHERE idUser = %s", [user])
       return None
     except:
       return "Failed"
