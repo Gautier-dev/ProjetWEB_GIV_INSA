@@ -104,7 +104,7 @@ class Utilisateurs(Resource):
       json = jsonify(emps)
       return json
 
-class Annonce(Resource):
+class PostAnnonce(Resource):
   def post(self):
     """
     Commande POST à la route /annonces
@@ -124,6 +124,27 @@ class Annonce(Resource):
     except:
       return False
 
+class VoirAnnonces(Resource):
+  def get(self,nomInteret,idQuartier):
+    """
+    Commande GET à la route /annonces/nomInteret/idQuartier
+    :return: Les annonces qui pourraient intéresser l'utilisateur
+    """
+    db = Database()
+    cursor = db.query(
+      '''SELECT * FROM annonce as a 
+      INNER JOIN interets as i ON i.idInteret = a.idInteret
+      INNER JOIN utilisateurs as u ON u.idUser = a.idUser
+      INNER JOIN quartiers as q ON q.idQuartier = u.idQuartier
+      WHERE i.nom = %s
+      AND (a.echelle = 3 
+      OR (a.echelle = 2 AND q.arrondissement = (SELECT q.arrondissement FROM quartiers as q WHERE q.idQuartier = %s))
+      OR (a.echelle = 1 AND u.idQuartier = %s))''',
+      (nomInteret,idQuartier,idQuartier)
+    )
+    emps = cursor.fetchall()
+    json = jsonify(emps)
+    return json
 
 class Login(Resource):
   def post(self):
@@ -208,17 +229,55 @@ class Utilisateur(Resource):
     except:
       return False
 
+class Contact(Resource):
+  def get(self,idUser1,idUser2):
+    """
+    Commande GET à la route /contact/<id1><id2>
+    :return: Renvoie la valeur de la relation entre les deux utilisateurs (-1 = aucune entrée, 0 = demande d'ami de id1, 1 = amitié, 2 = bloqué)
+    """
+    db = Database()
+    cursor = db.query(
+      "SELECT relation FROM contacts WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
+      (idUser1,idUser2,idUser2,idUser1))
+    emps = cursor.fetchall()
+    data = emps.jsonify()
+    if data == {}:
+      return -1
+    else:
+      return data["relation"]
 
+  def post(self,idUser1,idUser2):
+    """
+    Commande POST à la route /contact/<id1><id2>
+    :return: Modifie la valeur de la relation entre les deux utilisateurs. True si réussi, False sinon.
+    """
+    try:
+      db = Database()
+      args = request.get_json()
+      valeur = args["relation"]
+      cur = db.query("SELECT COUNT(*) FROM contacts WHERE idUser1 = %s AND idUser2 = %s", (idUser1,idUser2))
+      c = cur.fetchone()
+      if c['COUNT(*)'] == 0:
+        cur = db.query("INSERT INTO contacts (%s,%s,%s)",(idUser1,idUser2,valeur))
+      else:
+        cur = db.query(
+          "UPDATE contacts SET relation=%s WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
+          (valeur,idUser1, idUser2, idUser2, idUser1))
+      return True
+    except:
+      return False
 
 
 #Attribution des classes aux routes
 api.add_resource(Utilisateurs, '/utilisateurs')
-api.add_resource(Annonce,"/annonces")
+api.add_resource(PostAnnonce,"/annonces")
+api.add_resource(VoirAnnonces,"/annonces/<int:nomInteret>/<string:idQuartier>")
 api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
 api.add_resource(Register,"/signup")
 api.add_resource(Quartiers,'/quartiers')
 api.add_resource(Utilisateur,'/utilisateur/<string:idUser>')
+api.add_resource(Contact,'/contact/<string:idUser1>/<string:idUser2>')
 
 if __name__ == '__main__':
      app.run(port=5002)

@@ -1,0 +1,10 @@
+<form>
+  <select [(ngModel)]="interet" size="1" name="interet">
+    <option selected disabled hidden style='display: none' value=''></option>
+    <option *ngFor="let item of interets">{{item.nom}}</option>
+  </select>
+</form>
+<br>
+<button (click)="search()">Chercher les annonces chaudes de ta région</button>
+<br>
+<p>{{annonces | json}}</p>
