@@ -25,7 +25,7 @@ export class SignupComponent implements OnInit {
       + ', ton mdp est : ' + psw + ', ta confirmation de mdp est : ' + pswrepeat;
     if (psw !== pswrepeat) {
       // Affiche une erreur si les champs de mdp ne correspondent pas
-      (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Les mots de passe ne match pas !';
+      (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Les mots de passe ne matchent pas !';
       // Efface les champs de mdp
       (document.getElementById('psw') as HTMLInputElement).value = '';
       (document.getElementById('psw-repeat') as HTMLInputElement).value = '';
