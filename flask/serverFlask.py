@@ -52,14 +52,15 @@ def registerUser(db, form, ROUNDS):
   username = form['idUser']
   password = form['password']
   email = form['mail']
+  idQuartier = form['idQuartier']
 
   password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(ROUNDS))
 
   cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [username])
   c = cur.fetchone()
   if c['COUNT(*)'] == 0:
-    cur = db.query("INSERT INTO utilisateurs (`idUser`, `mail`, `password`, `idQuartier`) VALUES (%s,%s,%s,'Part-Dieu')",
-                   [username, email, password])
+    cur = db.query("INSERT INTO utilisateurs (`idUser`, `mail`, `password`, `idQuartier`) VALUES (%s,%s,%s,%s)",
+                   [username, email, password, idQuartier])
     return None
   else:
     return "User exists"
@@ -141,6 +142,18 @@ class Register(Resource):
     else:
       return False
 
+class Quartiers(Resource):
+  def get(self):
+    """
+
+    :return:
+    """
+    db = Database()
+    cursor = db.query("SELECT * FROM quartiers")
+    emps = cursor.fetchall()
+    json = jsonify(emps)
+    return json
+
 
 #Attribution des classes aux routes
 api.add_resource(Utilisateurs, '/utilisateurs')
@@ -148,6 +161,7 @@ api.add_resource(Annonce,"/annonces")
 api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
 api.add_resource(Register,"/signup")
+api.add_resource(Quartiers,'/quartiers')
 
 if __name__ == '__main__':
      app.run(port=5002)

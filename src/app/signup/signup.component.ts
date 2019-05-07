@@ -8,8 +8,12 @@ import {Location} from '@angular/common';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
+
+
 export class SignupComponent implements OnInit {
 
+  quartiers = []; // Sera rempli à l'initialisation de la classe
+  quartier = '';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -17,14 +21,18 @@ export class SignupComponent implements OnInit {
   };
   registerStatus: boolean;
   constructor(private httpClient: HttpClient, private router: Router, private location: Location) {}
-  ngOnInit() {}
+  ngOnInit() {
+    this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(data => {
+      this.quartiers = data as [JSON];
+    });
+  }
   connect() {
     // Recupere le textes des champs
     const pseudo = (document.getElementById('pseudo1') as HTMLInputElement).value;
     const psw = (document.getElementById('psw1') as HTMLInputElement).value;
     const data = {
-      pseudo,
-      psw
+      idUser: pseudo,
+      password: psw
     };
     this.httpClient.post('http://127.0.0.1:5002/login', data, this.httpOptions).subscribe();
   }
@@ -52,7 +60,8 @@ export class SignupComponent implements OnInit {
     const data = {
       idUser: pseudo,
       mail: email,
-      password: psw
+      password: psw,
+      idQuartier: this.quartier,
     };
     this.httpClient.post('http://127.0.0.1:5002/signup', data, this.httpOptions).subscribe(res => {
       this.registerStatus = res as boolean;
