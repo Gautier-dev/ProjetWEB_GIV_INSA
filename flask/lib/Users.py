@@ -55,9 +55,9 @@ def getUsers(db):
     try:
         userlist = []
         cur = db.query("SELECT idUser, mail FROM utilisateurs")
-        for row in cur.fetchall():
-            userlist.append({'name': row[0], 'email': row[1]})
-        return userlist
+        #for row in cur.fetchall():
+        #   userlist.append({'name': row[0], 'email': row[1]})
+        return cur.fetchall()
     except:
         error = "Failed"
         return error
