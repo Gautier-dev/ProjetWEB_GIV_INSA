@@ -20,6 +20,7 @@ export class SignupComponent implements OnInit {
     })
   };
   registerStatus: boolean;
+  connectStatus: boolean;
   constructor(private httpClient: HttpClient, private router: Router, private location: Location) {}
   ngOnInit() {
     this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(data => {
@@ -34,7 +35,19 @@ export class SignupComponent implements OnInit {
       idUser: pseudo,
       password: psw
     };
-    this.httpClient.post('http://127.0.0.1:5002/login', data, this.httpOptions).subscribe();
+    this.httpClient.post('http://127.0.0.1:5002/login', data, this.httpOptions).subscribe(res => {
+      this.connectStatus = res as boolean;
+      switch (this.connectStatus) {
+        case true: {
+          (document.getElementById('pseudo') as HTMLInputElement).value = 'Connexion réussie';
+          break;
+        }
+        case false: {
+          (document.getElementById('pseudo') as HTMLInputElement).value = 'Je n\'ai pas réussi à te connecter je suis désolé(e) :(';
+          break;
+        }
+      }
+    });
   }
   cancel() {
     // Supprime l'eventuelle erreur de mdp
