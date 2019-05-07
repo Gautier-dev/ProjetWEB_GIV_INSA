@@ -179,6 +179,37 @@ class Quartiers(Resource):
     json = jsonify(emps)
     return json
 
+class Utilisateur(Resource):
+  def get(self,idUser):
+    """
+    Commande GET à la route /utilisateurs/<id>
+    :return: Les informations de l'utilisateur (y compris son arrondissement)
+    """
+    db = Database()
+    idUser = idUser.split("=")[1]
+    cursor = db.query("SELECT * FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
+    emps = cursor.fetchall()
+    json = jsonify(emps)
+    return json
+
+  def put(self,idUser):
+    """
+    Commande PUT à la route /utilisateurs/<id>
+    Format json des datas envoyées : { changed : <champ changé>, to : <valeur> }
+    :return: True si la mise à jour des informations réussit, False sinon.
+    """
+    try:
+      db = Database()
+      args = request.get_json()
+      changed = args["changed"]
+      to = args["to"]
+      cursor = db.query("UPDATE utilisateurs SET %s = %s WHERE idUser = %s", (changed,to,idUser))
+      return True
+    except:
+      return False
+
+
+
 
 #Attribution des classes aux routes
 api.add_resource(Utilisateurs, '/utilisateurs')
@@ -187,6 +218,7 @@ api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
 api.add_resource(Register,"/signup")
 api.add_resource(Quartiers,'/quartiers')
+api.add_resource(Utilisateur,'/utilisateur/<string:idUser>')
 
 if __name__ == '__main__':
      app.run(port=5002)

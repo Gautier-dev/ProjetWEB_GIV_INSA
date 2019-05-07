@@ -31,7 +31,7 @@ export class AddAnnonceComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.httpClient.get('http://127.0.0.1:5002/interests').subscribe(data => {
+    this.httpClient.get('http://127.0.0.1:5002/interests', this.httpOptions).subscribe(data => {
       this.interests = data as [JSON];
     });
   }
