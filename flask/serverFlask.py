@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from json import dumps
 from flask_jsonpify import jsonify
 import pymysql
+import bcrypt
 import cryptography
 
 app = Flask(__name__)
@@ -26,6 +27,7 @@ class Database:
       self.con = pymysql.connect(host=host, user=user, password=password, db=db, cursorclass=pymysql.cursors.
                                  DictCursor)
       self.cur = self.con.cursor()
+      self.con.autocommit(True)
 
     #METHODE D'ACCES A LA BASE DE DONNEES
 
@@ -44,6 +46,23 @@ class Database:
         cursor = self.con.cursor()
         cursor.execute(sql, args)
     return cursor #fetchall pour retourner des tuples / commit pour mettre à jour la db
+
+def registerUser(db, form, ROUNDS):
+  error = None
+  username = form['idUser']
+  password = form['password']
+  email = form['mail']
+
+  password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(ROUNDS))
+
+  cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [username])
+  c = cur.fetchone()
+  if c['COUNT(*)'] == 0:
+    cur = db.query("INSERT INTO utilisateurs (`idUser`, `mail`, `password`, `idQuartier`) VALUES (%s,%s,%s,'Part-Dieu')",
+                   [username, email, password])
+    return None
+  else:
+    return "User exists"
 
 
 #DEFINITION DES DIFFERENTES CLASSES POUR L'ACCES A LA BASE DE DONNEES
@@ -64,18 +83,20 @@ class Annonce(Resource):
     """
     Commande POST à la route /annonces
     :effet: Ajoute une entrée dans la table annonce
-    :return: code 200
+    :return: réussite ou non
     """
-    db = Database()
-    args = request.get_json()
-    insert_stmt = (
-      "INSERT INTO annonce (idUser, idInteret, description, titre, echelle, etat) "
-      "VALUES (%s, %s, %s, %s, %s, 1)"
-    )  # Le 1 à la fin indique que l'annonce est active.
-    data = (args["idUser"],args["idInteret"],args["description"],args["title"],args["scale"])
-    cursor = db.query(insert_stmt,data)
-    cursor.commit()
-    return 200
+    try:
+      db = Database()
+      args = request.get_json()
+      insert_stmt = (
+        "INSERT INTO annonce (idUser, idInteret, description, titre, echelle, etat) "
+        "VALUES (%s, %s, %s, %s, %s, 1)"
+      )  # Le 1 à la fin indique que l'annonce est active.
+      data = (args["idUser"],args["idInteret"],args["description"],args["title"],args["scale"])
+      cursor = db.query(insert_stmt,data)
+      return True
+    except:
+      return False
 
 
 class Login(Resource):
@@ -107,11 +128,26 @@ class Interets(Resource):
     return json
 
 
+class Register(Resource):
+  def post(self):
+    """
+
+    :return: ffff
+    """
+    db = Database()
+    result = registerUser(db,request.get_json(),10)  #10 = cryptage
+    if not result:
+      return True
+    else:
+      return False
+
+
 #Attribution des classes aux routes
 api.add_resource(Utilisateurs, '/utilisateurs')
 api.add_resource(Annonce,"/annonces")
 api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
+api.add_resource(Register,"/signup")
 
 if __name__ == '__main__':
      app.run(port=5002)

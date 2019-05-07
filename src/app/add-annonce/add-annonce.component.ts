@@ -24,7 +24,7 @@ export class AddAnnonceComponent implements OnInit {
   titre = '';
   scale = '';
   status = 0;
-  interests = [];
+  interests = []; // Sera rempli à l'initialisation de la classe
 
 
   constructor(private httpClient: HttpClient, private router: Router, private location: Location) {
@@ -47,7 +47,9 @@ export class AddAnnonceComponent implements OnInit {
     };
     this.status = 1;
     // @ts-ignore
-    this.httpClient.post('http://127.0.0.1:5002/annonces', data, this.httpOptions).subscribe(location.reload());
+    this.httpClient.post('http://127.0.0.1:5002/annonces', data, this.httpOptions).subscribe(res => {
+      if (res === true) { location.reload(); } else {this.status = 2; }
+    });
   }
 }
 
