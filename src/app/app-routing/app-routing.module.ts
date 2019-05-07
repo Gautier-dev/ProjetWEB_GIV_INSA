@@ -6,13 +6,15 @@ import { ListeUtilisateursComponent } from '../liste-utilisateurs/liste-utilisat
 import { AccueilComponent } from '../accueil/accueil.component';
 import { AddAnnonceComponent } from "../add-annonce/add-annonce.component";
 import { SignupComponent} from "../signup/signup.component";
+import { UserpageComponent } from "../userpage/userpage.component"
 
 
 const routes: Routes = [
   {path: 'utilisateurs', component: ListeUtilisateursComponent},
   {path: '', component: AccueilComponent},
   {path: 'annonces/add', component: AddAnnonceComponent},
-  {path: 'signup', component: SignupComponent}
+  {path: 'signup', component: SignupComponent},
+  {path: 'user/:id', component: UserpageComponent}
 ];
 
 @NgModule({
