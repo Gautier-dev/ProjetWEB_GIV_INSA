@@ -40,6 +40,14 @@
     <label for="psw-repeat" style="padding: 10px;"><b>Confirmer le mot de passe</b></label>
     <input type="password" placeholder="Confirmer mot de passe" id="psw-repeat" required>
 
+    <form>
+      <select [(ngModel)]="quartier" size="1" name="quartier">
+        <option *ngFor="let item of quartiers">{{item.idQuartier}}</option>
+      </select>
+    </form>
+
+    <p>Quartier : {{quartier}}</p>
+
     <label style="padding: 10px">
       <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Se souvenir de moi
     </label>
