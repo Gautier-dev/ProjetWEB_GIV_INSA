@@ -131,6 +131,15 @@ class VoirAnnonces(Resource):
     :return: Les annonces qui pourraient intéresser l'utilisateur
     """
     db = Database()
+    print( '''SELECT * FROM annonce as a 
+      INNER JOIN interets as i ON i.idInteret = a.idInteret
+      INNER JOIN utilisateurs as u ON u.idUser = a.idUser
+      INNER JOIN quartiers as q ON q.idQuartier = u.idQuartier
+      WHERE i.nom = %s
+      AND (a.echelle = 3 
+      OR (a.echelle = 2 AND q.arrondissement = (SELECT q.arrondissement FROM quartiers as q WHERE q.idQuartier = %s))
+      OR (a.echelle = 1 AND u.idQuartier = %s))''',
+      (nomInteret,idQuartier,idQuartier))
     cursor = db.query(
       '''SELECT * FROM annonce as a 
       INNER JOIN interets as i ON i.idInteret = a.idInteret
@@ -271,7 +280,7 @@ class Contact(Resource):
 #Attribution des classes aux routes
 api.add_resource(Utilisateurs, '/utilisateurs')
 api.add_resource(PostAnnonce,"/annonces")
-api.add_resource(VoirAnnonces,"/annonces/<int:nomInteret>/<string:idQuartier>")
+api.add_resource(VoirAnnonces,"/annonces/<string:nomInteret>/<string:idQuartier>")
 api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
 api.add_resource(Register,"/signup")

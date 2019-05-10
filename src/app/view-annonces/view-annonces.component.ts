@@ -30,7 +30,7 @@ export class ViewAnnoncesComponent implements OnInit {
       this.interets = data as [JSON];
     });
     // TEMPORAIRE : devra être défini à l'aide de l'authentification.
-    this.idQuartier = 'Guillotière';
+    this.idQuartier = 'Part-Dieu';
   }
 
 
