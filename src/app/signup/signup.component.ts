@@ -2,15 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
+import { CookieService } from 'ngx-cookie-service';
+
+// Interface correspondant à la réponse en cas de connexion
+interface UserConnectionResponse {
+  success: boolean;
+  cookieValue: string;
+}
+
+// Interface correspondant à la réponse d'identification au cookie
+interface UserIdentificationResponse {
+  idUser: string;
+}
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
+  providers: [ CookieService ],
   styleUrls: ['./signup.component.css']
 })
 
 
 export class SignupComponent implements OnInit {
+
 
   quartiers = []; // Sera rempli à l'initialisation de la classe
   quartier = '';
@@ -19,14 +33,38 @@ export class SignupComponent implements OnInit {
       'Content-Type': 'application/json'
     })
   };
-  registerStatus: boolean;
-  connectStatus: boolean;
-  constructor(private httpClient: HttpClient, private router: Router, private location: Location) {}
+  registerStatus = false;
+  connectStatus = false;
+  idUser: string;
+
+  constructor(private httpClient: HttpClient, private router: Router, private location: Location, private cookieService: CookieService) {}
+
   ngOnInit() {
     this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(data => {
       this.quartiers = data as [JSON];
     });
+
+    // Vérification de l'existence ou non d'un cookie
+    if (this.cookieService.check('givinsa_id')) {
+      // Vérification de la validité du cookie actuel
+      this.httpClient.get<UserIdentificationResponse>
+      ('http://127.0.0.1:5002/whois/' + this.cookieService.get('givinsa_id')).subscribe(data => {
+        // Affichage :
+        console.log(data);
+        console.log(data.idUser);
+        if (data.idUser === '') {
+          // Cookie invalide (possible si il y a eu une connexion ailleurs) : suppression.
+          this.cookieService.delete('givinsa_id');
+        } else {
+          // Cookie valide : pas besoin de redemander une identification
+          this.connectStatus = true;
+          this.idUser = data.idUser;
+        }
+      });
+    }
   }
+
+
   connect() {
     // Recupere le textes des champs
     const pseudo = (document.getElementById('pseudo1') as HTMLInputElement).value;
@@ -35,13 +73,21 @@ export class SignupComponent implements OnInit {
       idUser: pseudo,
       password: psw
     };
-    this.httpClient.post('http://127.0.0.1:5002/login', data, this.httpOptions).subscribe(res => {
-      this.connectStatus = res as boolean;
+    this.httpClient.post<UserConnectionResponse>('http://127.0.0.1:5002/login', data, this.httpOptions).subscribe(res => {
+      this.connectStatus = res.success;
       switch (this.connectStatus) {
         case true: {
           (document.getElementById('pseudo') as HTMLInputElement).value = 'Connexion réussie';
+          // Mise en place du cookie (son absence a été vérifiée à l'initialisation de la page)
+          this.cookieService.set('givinsa_id', res.cookieValue, 7);
+          // Affichage de l'identifiant
+          this.httpClient.get<UserIdentificationResponse>
+          ('http://127.0.0.1:5002/whois/' + this.cookieService.get('givinsa_id'))
+            .subscribe(content => {this.idUser = content.idUser;
+            });
           break;
         }
+
         case false: {
           (document.getElementById('pseudo') as HTMLInputElement).value = 'Je n\'ai pas réussi à te connecter je suis désolé(e) :(';
           break;
@@ -49,6 +95,7 @@ export class SignupComponent implements OnInit {
       }
     });
   }
+
   cancel() {
     // Supprime l'eventuelle erreur de mdp
     (document.getElementById('pswerror') as HTMLInputElement).innerHTML = '';

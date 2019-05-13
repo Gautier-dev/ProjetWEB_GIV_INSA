@@ -1,4 +1,4 @@
-from flask import Flask, request, session
+from flask import Flask, request, session, make_response
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from json import dumps
@@ -6,6 +6,7 @@ from flask_jsonpify import jsonify
 import pymysql
 import bcrypt
 import cryptography
+from random import randint
 
 app = Flask(__name__)
 api = Api(app)
@@ -72,13 +73,13 @@ def loginForm(db, form):
     error = None
     try:
         idUser = form['idUser']
-        cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [idUser])  # verifier []
+        cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE idUser = %s", [idUser])  #On regarde si le pseudo existe
 
-        if not cur.fetchone()['COUNT(*)']:
+        if not cur.fetchone()['COUNT(*)']: #Le pseudo n'existe pas.
             raise ServerError('Incorrect username / password')
 
         password = form['password']
-        cur = db.query("SELECT password FROM utilisateurs WHERE idUser = %s", [idUser])
+        cur = db.query("SELECT password FROM utilisateurs WHERE idUser = %s", [idUser])  # On récupère le mot de passe.
 
         for row in cur.fetchall():
             if bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(10)) == row['password']:
@@ -131,15 +132,6 @@ class VoirAnnonces(Resource):
     :return: Les annonces qui pourraient intéresser l'utilisateur
     """
     db = Database()
-    print( '''SELECT * FROM annonce as a 
-      INNER JOIN interets as i ON i.idInteret = a.idInteret
-      INNER JOIN utilisateurs as u ON u.idUser = a.idUser
-      INNER JOIN quartiers as q ON q.idQuartier = u.idQuartier
-      WHERE i.nom = %s
-      AND (a.echelle = 3 
-      OR (a.echelle = 2 AND q.arrondissement = (SELECT q.arrondissement FROM quartiers as q WHERE q.idQuartier = %s))
-      OR (a.echelle = 1 AND u.idQuartier = %s))''',
-      (nomInteret,idQuartier,idQuartier))
     cursor = db.query(
       '''SELECT * FROM annonce as a 
       INNER JOIN interets as i ON i.idInteret = a.idInteret
@@ -159,14 +151,30 @@ class Login(Resource):
   def post(self):
     """
     Commande POST à la route /login
-    :return: données de l'utilisateurs ou warning si non connecté
+    :return: Une réponse avec un cookie ou False en fonction de si on a réussi à se connecter ou pas.
     """
     db = Database()
-    result = loginForm(db, request.get_json())
+    form = request.get_json()
+    result = loginForm(db, form) #On a un resultat SSI il y a eu une erreur
     if not result:
-        return True
+        cookieValue = randint(100,10000000)
+        response = {'success' : True, 'cookieValue' : str(cookieValue)}
+        print(cookieValue)
+        # Insertion de la valeur du cookie dans la base de données
+        idUser = form['idUser']
+        cur = db.query("SELECT COUNT(*) FROM cookies WHERE idUser = %s",
+                       [idUser])  # On regarde si le pseudo existe
+
+        if not cur.fetchone()['COUNT(*)']:  # Le pseudo n'existe pas.
+            _ = db.query("INSERT INTO cookies (idUser, value) VALUES (%s,%s)",(idUser,cookieValue))
+            # Il est possible que valueCookie existe déjà dans la table, auquel cas il y aura un échec !
+            # Il faut aussi prévoir de nettoyer la table des cookies périodiquement.
+        else: # Le pseudo existe déjà dans la bdd : on update la valeur du cookie
+            _ = db.query("UPDATE cookies SET value = %s WHERE idUser = %s ",(cookieValue,idUser))
+        return response
     else:
-        return False
+      response = {'success': False, 'cookieValue' : None}
+      return response
 
 class Interets(Resource):
   def get(self):
@@ -217,7 +225,8 @@ class Utilisateur(Resource):
     """
     db = Database()
     idUser = idUser.split("=")[1]
-    cursor = db.query("SELECT * FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
+    cursor = db.query(
+      "SELECT * FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
     emps = cursor.fetchall()
     json = jsonify(emps)
     return json
@@ -267,12 +276,40 @@ class Contact(Resource):
       cur = db.query("SELECT COUNT(*) FROM contacts WHERE idUser1 = %s AND idUser2 = %s", (idUser1,idUser2))
       c = cur.fetchone()
       if c['COUNT(*)'] == 0:
-        cur = db.query("INSERT INTO contacts (%s,%s,%s)",(idUser1,idUser2,valeur))
+        _ = db.query("INSERT INTO contacts (%s,%s,%s)",(idUser1,idUser2,valeur))
       else:
-        cur = db.query(
+        _ = db.query(
           "UPDATE contacts SET relation=%s WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
           (valeur,idUser1, idUser2, idUser2, idUser1))
       return True
+    except:
+      return False
+
+class QuiEstCe(Resource):
+  def get(self,cookieValue):
+    """
+    Commande post à la route /whoisit/<cookieValue>
+    :return: L'id de l'utilisateur
+    """
+    db = Database()
+    cur = db.query("SELECT COUNT(*) FROM cookies WHERE value = %s",
+                   cookieValue)  # On regarde si le pseudo existe
+    if not cur.fetchone()['COUNT(*)']:  # Le pseudo n'existe pas.
+      return {'success': False, 'idUser': ''}
+    else:
+      cursor = db.query("SELECT idUser FROM cookies WHERE value=%s",cookieValue)
+      emps = cursor.fetchall()
+      return {'success': True, 'idUser': emps[0]['idUser']}
+
+class AuRevoir(Resource):
+  def delete(self,cookieValue):
+    """
+    Commande post à la route /goodbye/<cookieValue>
+    :return: True ou False selon la réussite. L'entrée aura été supprimée de la table cookies.
+    """
+    try:
+      print("o")
+      ##TODO
     except:
       return False
 
@@ -287,6 +324,8 @@ api.add_resource(Register,"/signup")
 api.add_resource(Quartiers,'/quartiers')
 api.add_resource(Utilisateur,'/utilisateur/<string:idUser>')
 api.add_resource(Contact,'/contact/<string:idUser1>/<string:idUser2>')
+api.add_resource(QuiEstCe,'/whois/<string:cookieValue>')
+api.add_resource(AuRevoir,'/goodbye/<string:cookieValue>')
 
 if __name__ == '__main__':
      app.run(port=5002)
