@@ -1,10 +1,11 @@
 <div style="text-align:center">
   <h1>
-    Test du lien avec la base de données
+    Utilisateurs du site :
   </h1>
 </div>
 
 <div>
-  <button (click)="getAllUsers()">Tous les utilisateurs</button>
-  <span>Data: {{userData | json}}</span>
+  <ul>
+    <li *ngFor="let item of userData"><a href="/utilisateurs/{{item.idUser}}">{{item.idUser}}</a> : quartier {{item.idQuartier}}, arrondissement {{item.arrondissement}}.</li>
+  </ul>
 </div>

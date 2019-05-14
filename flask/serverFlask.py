@@ -64,10 +64,10 @@ def registerUser(db, form, ROUNDS):
   c = cur.fetchone()
   if c['COUNT(*)'] == 0:
     cur = db.query("INSERT INTO utilisateurs (`idUser`, `mail`, `password`, `idQuartier`) VALUES (%s,%s,%s,%s)",
-                   [username, email, password, idQuartier])
-    return None
+                   (username, email, password, idQuartier))
+    return True
   else:
-    return "User exists"
+    return False
 
 def loginForm(db, form):
     error = None
@@ -100,7 +100,8 @@ class Utilisateurs(Resource):
       :return: Le json de tous les utilisateurs
       """
       db = Database()
-      cursor = db.query("SELECT * FROM utilisateurs")
+      cursor = db.query(
+        "SELECT u.idUser, u.idQuartier, q.arrondissement FROM utilisateurs as u, quartiers as q WHERE q.idQuartier = u.idQuartier")
       emps = cursor.fetchall()
       json = jsonify(emps)
       return json
@@ -159,7 +160,6 @@ class Login(Resource):
     if not result:
         cookieValue = randint(100,10000000)
         response = {'success' : True, 'cookieValue' : str(cookieValue)}
-        print(cookieValue)
         # Insertion de la valeur du cookie dans la base de données
         idUser = form['idUser']
         cur = db.query("SELECT COUNT(*) FROM cookies WHERE idUser = %s",
@@ -197,11 +197,9 @@ class Register(Resource):
     """
     try:
       db = Database()
+      print(request.get_json())
       result = registerUser(db,request.get_json(),10)  #10 = cryptage
-      if not result:
-        return True
-      else:
-        return False
+      return result
     except:
       return False
 
@@ -218,15 +216,19 @@ class Quartiers(Resource):
     return json
 
 class Utilisateur(Resource):
-  def get(self,idUser):
+  def get(self,idUser,toutVoir):
     """
-    Commande GET à la route /utilisateurs/<id>
+    Commande GET à la route /utilisateurs/<id>/<toutVoir>
+    toutVoir = 0 si vision partielle, 1 si totale
     :return: Les informations de l'utilisateur (y compris son arrondissement)
     """
     db = Database()
-    idUser = idUser.split("=")[1]
-    cursor = db.query(
-      "SELECT * FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
+    if toutVoir == 0:
+      cursor = db.query(
+        "SELECT u.idQuartier, q.arrondissement FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
+    else:
+      cursor = db.query(
+        "SELECT u.idQuartier, q.arrondissement, u.prenom, u.nom, u.mail, u.telephone FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
     emps = cursor.fetchall()
     json = jsonify(emps)
     return json
@@ -252,17 +254,17 @@ class Contact(Resource):
     """
     Commande GET à la route /contact/<id1><id2>
     :return: Renvoie la valeur de la relation entre les deux utilisateurs (-1 = aucune entrée, 0 = demande d'ami de id1, 1 = amitié, 2 = bloqué)
+    Bloqué = retour à "aucune amitié" mais il est toujours possible de redemander le contact.
     """
     db = Database()
     cursor = db.query(
-      "SELECT relation FROM contacts WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
+      "SELECT relation, idUser1 FROM contacts WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
       (idUser1,idUser2,idUser2,idUser1))
     emps = cursor.fetchall()
-    data = emps.jsonify()
-    if data == {}:
-      return -1
+    if emps == ():
+      return {'relation': -1, 'demandeur': None}
     else:
-      return data["relation"]
+      return {'relation': emps[0]["relation"], 'demandeur': emps[0]["idUser1"]}
 
   def post(self,idUser1,idUser2):
     """
@@ -276,11 +278,24 @@ class Contact(Resource):
       cur = db.query("SELECT COUNT(*) FROM contacts WHERE idUser1 = %s AND idUser2 = %s", (idUser1,idUser2))
       c = cur.fetchone()
       if c['COUNT(*)'] == 0:
-        _ = db.query("INSERT INTO contacts (%s,%s,%s)",(idUser1,idUser2,valeur))
+        cur = db.query("INSERT INTO contacts VALUES (%s,%s,%s)",(idUser1,idUser2,valeur))
       else:
         _ = db.query(
           "UPDATE contacts SET relation=%s WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
           (valeur,idUser1, idUser2, idUser2, idUser1))
+      return True
+    except:
+      return False
+
+  def delete(self,idUser1,idUser2):
+    """
+    Commande DELETE à la route /contact/<id1>/<id2>
+    :return: True ou False
+    """
+    try:
+      db = Database()
+      _ = db.query("DELETE FROM contacts WHERE (idUser1 = %s AND idUser2 = %s) OR (idUser1 = %s AND idUser2 = %s)",
+                     (idUser1, idUser2, idUser2, idUser1))
       return True
     except:
       return False
@@ -308,8 +323,9 @@ class AuRevoir(Resource):
     :return: True ou False selon la réussite. L'entrée aura été supprimée de la table cookies.
     """
     try:
-      print("o")
-      ##TODO
+      db = Database()
+      _ = db.query("DELETE FROM cookies WHERE value = %s",cookieValue)
+      return True
     except:
       return False
 
@@ -322,7 +338,7 @@ api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
 api.add_resource(Register,"/signup")
 api.add_resource(Quartiers,'/quartiers')
-api.add_resource(Utilisateur,'/utilisateur/<string:idUser>')
+api.add_resource(Utilisateur,'/utilisateur/<string:idUser>/<int:toutVoir>')
 api.add_resource(Contact,'/contact/<string:idUser1>/<string:idUser2>')
 api.add_resource(QuiEstCe,'/whois/<string:cookieValue>')
 api.add_resource(AuRevoir,'/goodbye/<string:cookieValue>')

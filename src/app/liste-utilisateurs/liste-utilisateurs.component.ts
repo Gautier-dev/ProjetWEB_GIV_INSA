@@ -7,21 +7,21 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./liste-utilisateurs.component.css']
 })
 
-export class ListeUtilisateursComponent {
+export class ListeUtilisateursComponent implements OnInit {
   title = 'listeUtilisateurs';
-  userData: JSON;
+  userData: [JSON];
 
   constructor(private httpClient: HttpClient) {
   }
 
-  // tslint:disable-next-line:use-life-cycle-interface
   ngOnInit() {
+    this.getAllUsers();
   }
 
 
   getAllUsers() {
     this.httpClient.get('http://127.0.0.1:5002/utilisateurs').subscribe(data => {
-      this.userData = data as JSON;
+      this.userData = data as [JSON];
       console.log(this.userData);
     });
   }
