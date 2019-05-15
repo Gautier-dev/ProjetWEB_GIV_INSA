@@ -42,10 +42,10 @@ class Database:
     try:
         cursor = self.con.cursor()
         cursor.execute(sql, args)
-    except (AttributeError, pymysql.OperationalError): # gerer les erreurs
-        #__init__()
-        cursor = self.con.cursor()
-        cursor.execute(sql, args)
+    except (AttributeError, pymysql.OperationalError, pymysql.MySQLError) as e: # gerer les erreurs
+      print('Got error {!r}, errno is {}'.format(e, e.args[0]))
+      cursor = self.con.cursor()
+      cursor.execute(sql, args)
     return cursor #fetchall pour retourner des tuples / commit pour mettre à jour la db
 
 class ServerError(Exception):
@@ -233,9 +233,9 @@ class Utilisateur(Resource):
     json = jsonify(emps)
     return json
 
-  def put(self,idUser):
+  def put(self,idUser,toutVoir):
     """
-    Commande PUT à la route /utilisateurs/<id>
+    Commande PUT à la route /utilisateurs/<id>/<toutVoir> (deuxième argument inutile ici)
     Format json des datas envoyées : { changed : <champ changé>, to : <valeur> }
     :return: True si la mise à jour des informations réussit, False sinon.
     """
@@ -244,7 +244,7 @@ class Utilisateur(Resource):
       args = request.get_json()
       changed = args["changed"]
       to = args["to"]
-      cursor = db.query("UPDATE utilisateurs SET %s = %s WHERE idUser = %s", (changed,to,idUser))
+      _ = db.query("UPDATE utilisateurs SET {} = '{}' WHERE idUser = '{}'".format(changed,to,idUser))
       return True
     except:
       return False

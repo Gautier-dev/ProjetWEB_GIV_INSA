@@ -40,9 +40,6 @@ export class SignupComponent implements OnInit {
   constructor(private httpClient: HttpClient, private router: Router, private location: Location, private cookieService: CookieService) {}
 
   ngOnInit() {
-    this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(data => {
-      this.quartiers = data as [JSON];
-    });
 
     // Vérification de l'existence ou non d'un cookie
     if (this.cookieService.check('givinsa_id')) {
@@ -57,6 +54,12 @@ export class SignupComponent implements OnInit {
           // Cookie valide : pas besoin de redemander une identification
           this.connectStatus = true;
           this.idUser = data.idUser;
+        }
+        // On cherche la liste des quartiers uniquement si c'est nécessaire.
+        if (this.connectStatus === false) {
+          this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(resultat => {
+            this.quartiers = resultat as [JSON];
+          });
         }
       });
     }
