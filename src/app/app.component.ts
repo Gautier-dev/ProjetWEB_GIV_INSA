@@ -12,19 +12,13 @@ export class AppComponent {
 
   serverData: JSON;
   employeeData: JSON;
-  employee:JSON;
+  employee: JSON;
 
   constructor(private httpClient: HttpClient) {
   }
+  sayOK() {
+      this.title = 'ok';
 
-  ngOnInit() {
-  }
-
-  sayHi() {
-    this.httpClient.get('http://127.0.0.1:5002/').subscribe(data => {
-      this.serverData = data as JSON;
-      console.log(this.serverData);
-    })
   }
 
   getAllEmployees() {

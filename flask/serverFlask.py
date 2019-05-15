@@ -120,7 +120,7 @@ class PostAnnonce(Resource):
         "VALUES (%s, %s, %s, %s, %s, 1)"
       )  # Le 1 à la fin indique que l'annonce est active.
       data = (args["idUser"],args["idInteret"],args["description"],args["title"],args["scale"])
-      cursor = db.query(insert_stmt,data)
+      cursor = db.query(insert_stmt, data)
       return True
     except:
       return False
@@ -286,7 +286,7 @@ class Contact(Resource):
       return False
 
 class QuiEstCe(Resource):
-  def get(self,cookieValue):
+  def get(self, cookieValue):
     """
     Commande post à la route /whoisit/<cookieValue>
     :return: L'id de l'utilisateur
@@ -297,9 +297,29 @@ class QuiEstCe(Resource):
     if not cur.fetchone()['COUNT(*)']:  # Le pseudo n'existe pas.
       return {'success': False, 'idUser': ''}
     else:
-      cursor = db.query("SELECT idUser FROM cookies WHERE value=%s",cookieValue)
+      cursor = db.query("SELECT idUser FROM cookies WHERE value=%s", cookieValue)
       emps = cursor.fetchall()
       return {'success': True, 'idUser': emps[0]['idUser']}
+
+class QuartierUser(Resource):
+  def get(self, user):
+    """
+    Commande post à la route /quartier/<user>
+    :return: quartier de l'utilisateur
+    """
+    db = Database()
+    cur = db.query("SELECT COUNT(*) FROM cookies WHERE value = %s",
+                   cookieValue)  # On regarde si le pseudo existe
+    if not cur.fetchone()['COUNT(*)']:  # Le pseudo n'existe pas.
+      return {'success': False, 'idUser': ''}
+    else:
+      cur2 = db.query("SELECT idQuartier FROM utilisateur WHERE idUser = %s", user)
+      res = cur2.fetchall()
+      return {'success': True, 'idUser': res[0]['idQuartier']}
+
+
+
+
 
 class AuRevoir(Resource):
   def delete(self,cookieValue):
@@ -326,6 +346,7 @@ api.add_resource(Utilisateur,'/utilisateur/<string:idUser>')
 api.add_resource(Contact,'/contact/<string:idUser1>/<string:idUser2>')
 api.add_resource(QuiEstCe,'/whois/<string:cookieValue>')
 api.add_resource(AuRevoir,'/goodbye/<string:cookieValue>')
+api.add_resource(QuartierUser,'/quartier/<string:user>')
 
 if __name__ == '__main__':
      app.run(port=5002)

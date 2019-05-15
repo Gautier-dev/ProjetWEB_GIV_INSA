@@ -11,6 +11,8 @@ import {FormsModule} from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
 import { UserpageComponent } from './userpage/userpage.component';
 import { ViewAnnoncesComponent } from './view-annonces/view-annonces.component';
+import { NgbdTabsetBasic} from './afficher-annonce/afficher-annonce.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,13 +22,16 @@ import { ViewAnnoncesComponent } from './view-annonces/view-annonces.component';
     AddAnnonceComponent,
     SignupComponent,
     UserpageComponent,
-    ViewAnnoncesComponent
+    ViewAnnoncesComponent,
+    NgbdTabsetBasic
+
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
