@@ -1,14 +1,13 @@
-<p>
-  Attention notre service utilise des cookies pour vous maintenir connecté !<br>
-  Aucune autre information qu'un id aléatoire ne sera stocké sur votre machine.<br>
-  Cet identifiant ne sera pas revendu.
-</p>
-
 <p *ngIf="connectStatus == true">
   Bienvenue à vous, {{idUser}} !
 </p>
 
 <div class="container" *ngIf="connectStatus == false">
+  <p>
+    Attention notre service utilise des cookies pour vous maintenir connecté !<br>
+    Aucune autre information qu'un id aléatoire ne sera stocké sur votre machine.<br>
+    Cet identifiant ne sera pas revendu.
+  </p>
   <form action="login.php" style="border:1px solid #ccc;">
     <p style="text-align: center;">Vous avez déjà un compte ?</p>
     <h1 style="text-align: center;">Se connecter</h1>
@@ -52,6 +51,7 @@
 
     <form>
       <select [(ngModel)]="quartier" size="1" name="quartier">
+        <option></option>
         <option *ngFor="let item of quartiers">{{item.idQuartier}}</option>
       </select>
     </form>
