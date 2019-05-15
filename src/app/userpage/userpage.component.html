@@ -68,8 +68,27 @@ Vérification de la connexion.
   <div *ngIf="status == 2">
     <p>
       Vous êtes le propriétaire de cette page.<br>
-      Vous pourrez bientôt la modifier.
+      Vous pouvez par conséquent la modifier.
     </p>
+    <h2>
+      Modifications du profil.
+    </h2>
+    <label>Changer de nom : <input type="text" [(ngModel)]="changeName" name="changeNom"><br></label>
+    <button (click)="nameChange()">Appliquer le changement</button><br><br>
+    <label>Changer de prénom : <input [(ngModel)]="changeFirstName" name="changeFirstName"><br></label>
+    <button (click)="firstNameChange()">Appliquer le changement</button><br><br>
+    <label>Changer de numéro de téléphone : <input [(ngModel)]="changePhone" name="changePhone"><br></label>
+    <button (click)="phoneChange()">Appliquer le changement</button><br><br>
+    <label>Changer de mail : <input [(ngModel)]="changeMail" name="changeMail"><br></label>
+    <button (click)="mailChange()">Appliquer le changement</button><br><br>
+    Changer de quartier : <br>
+    <form>
+      <label><select [(ngModel)]="changeQuartier" size="1" name="changeQuartier">
+        <option></option>
+        <option *ngFor="let item of quartiers">{{item.idQuartier}}</option>
+      </select></label>
+    </form>
+    <button (click)="quartierChange()">Appliquer le changement</button><br><br>
   </div>
 
 </div>

@@ -37,6 +37,13 @@ export class UserpageComponent implements OnInit {
   id: string; // Identifiant du PROPRIETAIRE DE LA PAGE
   responsableDemande: string; // Dans le cas d'une demande d'ami : celui qui a effectué la demande.
 
+  changeName: '';
+  changeFirstName: '';
+  changePhone: '';
+  changeMail: '';
+  quartiers = []; // Sera rempli à l'initialisation de la classe si besoin
+  changeQuartier: '';
+
   constructor(private route: ActivatedRoute, private httpClient: HttpClient, private cookieService: CookieService) { }
 
   ngOnInit() {
@@ -63,11 +70,15 @@ export class UserpageComponent implements OnInit {
           // Vision : totale.
           // Possibilité de modifier des choses.
           // Possibilité de voir les demandes en ami et de les accepter / refuser.
+          // Nécessité de charger les quartiers si l'utilisateur veut les changer.
           if (this.id === this.idUser) {
             this.httpClient.get('http://127.0.0.1:5002/utilisateur/' + this.id + '/1', this.httpOptions).subscribe(res => {
               this.userData = res as [JSON];
             });
             this.status = 2;
+            this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(result => {
+              this.quartiers = result as [JSON];
+            });
           } else {
 
             // Check de la relation.
@@ -156,4 +167,75 @@ export class UserpageComponent implements OnInit {
   generateArray(obj) {
     return Object.keys(obj).map((key) => obj[key] );
   }
+
+  // Modification du nom
+  nameChange() {
+    this.httpClient.put(
+      'http://127.0.0.1:5002/utilisateur/' + this.idUser + '/0',
+      {changed: 'nom', to: this.changeName},
+      this.httpOptions).subscribe(res => {
+      if (res === true) {
+        location.reload();
+      } else {
+        console.log('Erreur lors de la demande.');
+      }
+    });
+  }
+
+  // Modification du prénom
+  firstNameChange() {
+    this.httpClient.put(
+      'http://127.0.0.1:5002/utilisateur/' + this.idUser + '/0',
+      {changed: 'prenom', to: this.changeFirstName},
+      this.httpOptions).subscribe(res => {
+      if (res === true) {
+        location.reload();
+      } else {
+        console.log('Erreur lors de la demande.');
+      }
+    });
+  }
+
+  // Modification du numéro de téléphone
+  phoneChange() {
+    this.httpClient.put(
+      'http://127.0.0.1:5002/utilisateur/' + this.idUser + '/0',
+      {changed: 'telephone', to: this.changePhone},
+      this.httpOptions).subscribe(res => {
+      if (res === true) {
+        location.reload();
+      } else {
+        console.log('Erreur lors de la demande.');
+      }
+    });
+  }
+
+  // Modification du mail
+  mailChange() {
+    this.httpClient.put(
+      'http://127.0.0.1:5002/utilisateur/' + this.idUser + '/0',
+      {changed: 'mail', to: this.changeMail},
+      this.httpOptions).subscribe(res => {
+      if (res === true) {
+        location.reload();
+      } else {
+        console.log('Erreur lors de la demande.');
+      }
+    });
+  }
+
+  // Modification du quartier
+  quartierChange() {
+    this.httpClient.put(
+      'http://127.0.0.1:5002/utilisateur/' + this.idUser + '/0',
+      {changed: 'idQuartier', to: this.changeQuartier},
+      this.httpOptions).subscribe(res => {
+      if (res === true) {
+        location.reload();
+      } else {
+        console.log('Erreur lors de la demande.');
+      }
+    });
+  }
+
 }
