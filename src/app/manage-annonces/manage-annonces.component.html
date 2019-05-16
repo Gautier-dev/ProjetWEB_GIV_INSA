@@ -1,0 +1,11 @@
+<div *ngIf="connectStatus == true">
+  <h1>Vos annonces :</h1>
+  <ul>
+    <li *ngFor="let annonce of annonces">
+      {{annonce.titre}}<br>
+      <button *ngIf="annonce.etat == 1" (click)="setAsked(annonce.idAnnonce)">L'annonce a trouvé preneur, mais l'objet est encore en ma possession</button>
+      <button *ngIf="annonce.etat == 0" (click)="setFree(annonce.idAnnonce)">L'annonce avait trouvé preneur, mais je la remet disponible.</button>
+      <button (click)="deleteAnnonce(annonce.idAnnonce)">Supprimer l'annonce</button>
+    </li>
+  </ul>
+</div>

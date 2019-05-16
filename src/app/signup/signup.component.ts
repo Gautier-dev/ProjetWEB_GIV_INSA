@@ -81,11 +81,14 @@ export class SignupComponent implements OnInit {
           (document.getElementById('pseudo') as HTMLInputElement).value = 'Connexion réussie';
           // Mise en place du cookie (son absence a été vérifiée à l'initialisation de la page)
           this.cookieService.set('givinsa_id', res.cookieValue, 7);
-          // Affichage de l'identifiant
+          location.reload();
+          /* Affichage de l'identifiant
           this.httpClient.get<UserIdentificationResponse>
           ('http://127.0.0.1:5002/whois/' + this.cookieService.get('givinsa_id'))
             .subscribe(content => {this.idUser = content.idUser;
             });
+
+           */
           break;
         }
 

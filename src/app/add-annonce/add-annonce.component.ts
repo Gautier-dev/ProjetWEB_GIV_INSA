@@ -53,12 +53,12 @@ export class AddAnnonceComponent implements OnInit {
           this.connectStatus = true;
           this.idUser = data.idUser;
         }
-      });
-    }
-    // La suite ne doit se faire que si l'utilisateur est identifié.
-    if (this.connectStatus === true) {
-      this.httpClient.get('http://127.0.0.1:5002/interests', this.httpOptions).subscribe(data => {
-        this.interests = data as [JSON];
+        // La suite ne doit se faire que si l'utilisateur est identifié.
+        if (this.connectStatus === true) {
+          this.httpClient.get('http://127.0.0.1:5002/interests', this.httpOptions).subscribe(res => {
+            this.interests = res as [JSON];
+          });
+        }
       });
     }
   }
@@ -66,7 +66,6 @@ export class AddAnnonceComponent implements OnInit {
 
   post() {
     const data = {
-      idUser: this.idUser,
       idInteret: this.numInteret,
       description: this.description,
       title: this.titre,
@@ -74,7 +73,7 @@ export class AddAnnonceComponent implements OnInit {
     };
     this.status = 1;
     // @ts-ignore
-    this.httpClient.post('http://127.0.0.1:5002/annonces', data, this.httpOptions).subscribe(res => {
+    this.httpClient.post('http://127.0.0.1:5002/annonces/' + this.idUser, data, this.httpOptions).subscribe(res => {
       if (res === true) { location.reload(); } else {this.status = 2; }
     });
   }
