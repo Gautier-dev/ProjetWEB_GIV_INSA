@@ -89,6 +89,12 @@ Vérification de la connexion.
       </select></label>
     </form>
     <button (click)="quartierChange()">Appliquer le changement</button><br><br>
+    <h2>Demandes en contact reçues :</h2>
+    <ul>
+      <li *ngFor="let demande of demandesContact">
+        <a href="/utilisateurs/{{demande.idUser1}}">{{demande.idUser1}}</a>
+      </li>
+    </ul>
   </div>
 
 </div>

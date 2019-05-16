@@ -36,6 +36,7 @@ export class UserpageComponent implements OnInit {
   friend: number;
   id: string; // Identifiant du PROPRIETAIRE DE LA PAGE
   responsableDemande: string; // Dans le cas d'une demande d'ami : celui qui a effectué la demande.
+  demandesContact: [JSON];
 
   changeName: '';
   changeFirstName: '';
@@ -79,6 +80,11 @@ export class UserpageComponent implements OnInit {
             this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(result => {
               this.quartiers = result as [JSON];
             });
+            this.httpClient.get('http://127.0.0.1:5002/utilisateur/' + this.id + '/2', this.httpOptions)
+              .subscribe(res => {
+                this.demandesContact = res as [JSON];
+                console.log(res);
+              });
           } else {
 
             // Check de la relation.

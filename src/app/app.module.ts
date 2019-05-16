@@ -11,6 +11,8 @@ import {FormsModule} from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
 import { UserpageComponent } from './userpage/userpage.component';
 import { ViewAnnoncesComponent } from './view-annonces/view-annonces.component';
+import { ConceptionComponent } from './conception/conception.component';
+import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { ViewAnnoncesComponent } from './view-annonces/view-annonces.component';
     AddAnnonceComponent,
     SignupComponent,
     UserpageComponent,
-    ViewAnnoncesComponent
+    ViewAnnoncesComponent,
+    ConceptionComponent,
+    ManageAnnoncesComponent
   ],
   imports: [
     BrowserModule,

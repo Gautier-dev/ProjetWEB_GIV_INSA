@@ -107,9 +107,21 @@ class Utilisateurs(Resource):
       return json
 
 class PostAnnonce(Resource):
-  def post(self):
+  def get(self,id):
     """
-    Commande POST à la route /annonces
+    Commande GET à la route /annonces/id
+    :effet: Donne toutes les annonces d'un utilisateur
+    :return: Le json de ces annonces
+    """
+    db = Database()
+    cursor = db.query("SELECT * FROM annonce WHERE idUser = %s",id)
+    emps = cursor.fetchall()
+    json = jsonify(emps)
+    return json
+
+  def post(self,id):
+    """
+    Commande POST à la route /annonces/id
     :effet: Ajoute une entrée dans la table annonce
     :return: réussite ou non
     """
@@ -120,8 +132,36 @@ class PostAnnonce(Resource):
         "INSERT INTO annonce (idUser, idInteret, description, titre, echelle, etat) "
         "VALUES (%s, %s, %s, %s, %s, 1)"
       )  # Le 1 à la fin indique que l'annonce est active.
-      data = (args["idUser"],args["idInteret"],args["description"],args["title"],args["scale"])
+      data = (id,args["idInteret"],args["description"],args["title"],args["scale"])
       cursor = db.query(insert_stmt,data)
+      return True
+    except:
+      return False
+
+  def put(self,id):
+    """
+    Commande PUT à la route /annonces/id
+    :effet: Passe l'annonce en "en attente de don" (donc si il y a eu une demande) ou en "libre"
+    :return: True ou False
+    """
+    try:
+      db = Database()
+      args = request.get_json()
+      etat = args["etat"]
+      _ = db.query("UPDATE annonce SET etat = {} WHERE idAnnonce = {}".format(etat,id))
+      return True
+    except:
+      return False
+
+  def delete(self,id):
+    """
+    Commande DELETE à la route /annonces/id
+    :effet: Supprime l'annonce ayant comme idAnnonce id.
+    :return: True ou False selon la réussite
+    """
+    try:
+      db = Database()
+      _ = db.query("DELETE FROM annonce WHERE idAnnonce = %s",id)
       return True
     except:
       return False
@@ -219,16 +259,18 @@ class Utilisateur(Resource):
   def get(self,idUser,toutVoir):
     """
     Commande GET à la route /utilisateurs/<id>/<toutVoir>
-    toutVoir = 0 si vision partielle, 1 si totale
+    toutVoir = 0 si vision partielle, 1 si totale, 2 si l'on souhaite avoir les demandes reçues par l'utilisateur.
     :return: Les informations de l'utilisateur (y compris son arrondissement)
     """
     db = Database()
     if toutVoir == 0:
       cursor = db.query(
         "SELECT u.idQuartier, q.arrondissement FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
-    else:
+    elif toutVoir == 1:
       cursor = db.query(
         "SELECT u.idQuartier, q.arrondissement, u.prenom, u.nom, u.mail, u.telephone FROM utilisateurs as u, quartiers as q WHERE u.idUser = %s AND u.idQuartier = q.idQuartier",(idUser))
+    elif toutVoir == 2:
+      cursor = db.query("SELECT idUser1 FROM contacts WHERE idUser2 = %s AND relation = 0",idUser)
     emps = cursor.fetchall()
     json = jsonify(emps)
     return json
@@ -332,7 +374,7 @@ class AuRevoir(Resource):
 
 #Attribution des classes aux routes
 api.add_resource(Utilisateurs, '/utilisateurs')
-api.add_resource(PostAnnonce,"/annonces")
+api.add_resource(PostAnnonce,"/annonces/<string:id>")
 api.add_resource(VoirAnnonces,"/annonces/<string:nomInteret>/<string:idQuartier>")
 api.add_resource(Login, '/login')
 api.add_resource(Interets,'/interests')
