@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-view-annonces',
@@ -15,15 +16,20 @@ export class ViewAnnoncesComponent implements OnInit {
   interet: 0; // Valeur à 0 : "peu importe"
   interets: [JSON];
 
-  annonces: {};
+  annonces: [JSON];
+  annonceSelect: JSON;
 
   search() {
     this.httpClient.get('http://127.0.0.1:5002/annonces/' + this.interet + '/' + this.idQuartier).subscribe(data => {
-      this.annonces = data as JSON;
+      this.annonces = data as [JSON];
     });
   }
 
-  constructor(private httpClient: HttpClient) { }
+  annonce(annonce) {
+    this.annonceSelect = annonce;
+  }
+
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
     this.httpClient.get('http://127.0.0.1:5002/interests').subscribe(data => {

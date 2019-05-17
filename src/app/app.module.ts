@@ -11,8 +11,12 @@ import {FormsModule} from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
 import { UserpageComponent } from './userpage/userpage.component';
 import { ViewAnnoncesComponent } from './view-annonces/view-annonces.component';
-import { NgbdTabsetBasic} from './afficher-annonce/afficher-annonce.component';
+import { AfficherAnnonceComponent} from './afficher-annonce/afficher-annonce.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     SignupComponent,
     UserpageComponent,
     ViewAnnoncesComponent,
-    NgbdTabsetBasic
+    AfficherAnnonceComponent,
+
 
   ],
   imports: [
@@ -31,7 +36,11 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatSelectModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -10,27 +10,11 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
   title = 'app';
 
-  serverData: JSON;
-  employeeData: JSON;
-  employee: JSON;
-
   constructor(private httpClient: HttpClient) {
   }
-  sayOK() {
+  Accueil() {
       this.title = 'ok';
 
   }
 
-  getAllEmployees() {
-    this.httpClient.get('http://127.0.0.1:5002/employees').subscribe(data => {
-      this.employeeData = data as JSON;
-      console.log(this.employeeData);
-    })
-  }
-  getEmployee() {
-    this.httpClient.get('http://127.0.0.1:5002/employees/1').subscribe(data => {
-      this.employee = data as JSON;
-      console.log(this.employee);
-    })
-  }
 }
