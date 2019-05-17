@@ -36,6 +36,7 @@ export class SignupComponent implements OnInit {
   registerStatus = false;
   connectStatus = false;
   idUser: string;
+  verificationDone = false; // Passe à true quand on a vérifié si l'utilisateur était connecté ou non.
 
   constructor(private httpClient: HttpClient, private router: Router, private location: Location, private cookieService: CookieService) {}
 
@@ -55,14 +56,16 @@ export class SignupComponent implements OnInit {
           this.connectStatus = true;
           this.idUser = data.idUser;
         }
-        // On cherche la liste des quartiers uniquement si c'est nécessaire.
-        if (this.connectStatus === false) {
-          this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(resultat => {
-            this.quartiers = resultat as [JSON];
-          });
-        }
       });
     }
+    // On cherche la liste des quartiers uniquement si c'est nécessaire.
+    if (this.connectStatus === false) {
+      this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(resultat => {
+        this.quartiers = resultat as [JSON];
+      });
+    }
+    // Nécessaire pour que les autres composants puissent avoir accès à l'iduser
+    this.verificationDone = true;
   }
 
 
