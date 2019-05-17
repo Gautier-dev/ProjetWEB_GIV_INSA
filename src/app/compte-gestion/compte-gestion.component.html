@@ -1,0 +1,9 @@
+<p *ngIf="connectStatus === true">
+  <a href="/utilisateurs/{{idUser}}">Accéder à votre page utilisateurs</a><br>
+  <button (click)="disconnect()">Se déconnecter</button>
+</p>
+
+<p *ngIf="connectStatus === false">
+  Vous êtes bien déconnecté.<br>
+  <a href="/">Retourner à la page d'accueil</a>
+</p>

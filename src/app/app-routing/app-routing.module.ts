@@ -11,6 +11,7 @@ import { ViewAnnoncesComponent } from '../view-annonces/view-annonces.component'
 import {AfficherAnnonceComponent} from '../afficher-annonce/afficher-annonce.component';
 import { ConceptionComponent} from '../conception/conception.component';
 import { ManageAnnoncesComponent } from '../manage-annonces/manage-annonces.component';
+import {CompteGestionComponent} from '../compte-gestion/compte-gestion.component';
 
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path: 'conception', component: ConceptionComponent},
   {path: 'annonces/view', component: ViewAnnoncesComponent},
   {path: 'annonces/add', component: AddAnnonceComponent},
-  {path: 'annonces/manage', component: ManageAnnoncesComponent}
+  {path: 'annonces/manage', component: ManageAnnoncesComponent},
+  {path: 'gestion', component: CompteGestionComponent}
 ];
 
 @NgModule({

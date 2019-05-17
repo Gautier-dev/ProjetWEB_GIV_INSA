@@ -1,40 +1,42 @@
-<p>
-  Veuillez entrer les détails de votre annonce :<br>
+<div *ngIf="connectStatus === true">
+  <p>
+    Veuillez entrer les détails de votre annonce :<br>
 
-  Nom de l'annonce : <input [(ngModel)]="titre" placeholder="titre"><br>
-  Description de l'annonce : <input [(ngModel)]="description" placeholder="description"><br><br>
+    Nom de l'annonce : <input [(ngModel)]="titre" placeholder="titre"><br>
+    Description de l'annonce : <input [(ngModel)]="description" placeholder="description"><br><br>
 
-  Choix de la portée de l'annonce :<br>
-</p>
+    Choix de la portée de l'annonce :<br>
+  </p>
 
-  <form name="portée"> <!--Choix de la portée de l'annonce-->
-    <label>
-      <input [(ngModel)]="scale" type="radio" value="1" [ngModelOptions]="{standalone: true}">
-      Quartier
-    </label><br/>
-    <label>
-      <input [(ngModel)]="scale" type="radio" value="2" [ngModelOptions]="{standalone: true}">
-      Arrondissement
-    </label><br/>
-    <label>
-      <input [(ngModel)]="scale" type="radio" value="3" [ngModelOptions]="{standalone: true}">
-      Lyon
-    </label><br/>
+    <form name="portée"> <!--Choix de la portée de l'annonce-->
+      <label>
+        <input [(ngModel)]="scale" type="radio" value="1" [ngModelOptions]="{standalone: true}">
+        Quartier
+      </label><br/>
+      <label>
+        <input [(ngModel)]="scale" type="radio" value="2" [ngModelOptions]="{standalone: true}">
+        Arrondissement
+      </label><br/>
+      <label>
+        <input [(ngModel)]="scale" type="radio" value="3" [ngModelOptions]="{standalone: true}">
+        Lyon
+      </label><br/>
+    </form>
+
+  <p>Choix de la catégorie : </p> <!--Choix de l'intérêt de l'annonce.-->
+  <form>
+    <label *ngFor="let item of interests">
+      <input [(ngModel)]="numInteret" type="radio" value="{{item.idInteret}}" [ngModelOptions]="{standalone: true}">
+      {{item.nom}}<br>
+    </label>
   </form>
+  <p>
+    Résumé :<br>
+    {{titre}} : {{description}}<br>
+    {{scale}},{{numInteret}}<br>
+    {{status}}
+  </p>
 
-<p>Choix de la catégorie : </p> <!--Choix de l'intérêt de l'annonce.-->
-<form>
-  <label *ngFor="let item of interests">
-    <input [(ngModel)]="numInteret" type="radio" value="{{item.idInteret}}" [ngModelOptions]="{standalone: true}">
-    {{item.nom}}<br>
-  </label>
-</form>
-<p>
-  Résumé :<br>
-  {{titre}} : {{description}}<br>
-  {{scale}},{{numInteret}}<br>
-  {{status}}
-</p>
+  <button (click)="post()">Cliquez ici pour publier l'annonce.</button>
 
-<button (click)="post()">Cliquez ici pour publier l'annonce.</button>
-
+</div>

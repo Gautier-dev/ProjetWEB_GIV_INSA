@@ -19,6 +19,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import { ConceptionComponent } from './conception/conception.component';
 import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
+import { CompteGestionComponent } from './compte-gestion/compte-gestion.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.compo
     ViewAnnoncesComponent,
     AfficherAnnonceComponent,
     ConceptionComponent,
-    ManageAnnoncesComponent
+    ManageAnnoncesComponent,
+    CompteGestionComponent
   ],
   imports: [
     BrowserModule,

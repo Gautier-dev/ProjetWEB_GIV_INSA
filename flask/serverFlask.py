@@ -365,8 +365,8 @@ class QuartierUser(Resource):
     :return: quartier de l'utilisateur
     """
     db = Database()
-    cur = db.query("SELECT COUNT(*) FROM cookies WHERE value = %s",
-                   cookieValue)  # On regarde si le pseudo existe
+    cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE value = %s",
+                   user)  # On regarde si le pseudo existe
     if not cur.fetchone()['COUNT(*)']:  # Le pseudo n'existe pas.
       return {'success': False, 'idUser': ''}
     else:
