@@ -1,15 +1,19 @@
-<p>
-  Attention notre service utilise des cookies pour vous maintenir connecté !<br>
-  Aucune autre information qu'un id aléatoire ne sera stocké sur votre machine.<br>
-  Cet identifiant ne sera pas revendu.
-</p>
-
 <p *ngIf="connectStatus == true">
-  Bienvenue à vous, {{idUser}} !
+  Bienvenue à vous, {{idUser}} !<br>
+  <a href="/utilisateurs/{{idUser}}">Accès à votre page utilisateur.</a><br>
+  <a href="/annonces/add">Créer une annonce</a><br>
+  <a href="/annonces/manage">Gérer les annonces</a><br>
+  <a href="/utilisateurs">Liste des utilisateurs</a><br>
+
 </p>
 
 <div class="container" *ngIf="connectStatus == false">
-  <form action="login.php" style="border:1px solid #ccc;">
+  <p>
+    Attention notre service utilise des cookies pour vous maintenir connecté !<br>
+    Aucune autre information qu'un id aléatoire ne sera stocké sur votre machine.<br>
+    Cet identifiant ne sera pas revendu.
+  </p>
+  <form style="border:1px solid #ccc;">
     <p style="text-align: center;">Vous avez déjà un compte ?</p>
     <h1 style="text-align: center;">Se connecter</h1>
     <hr>
@@ -33,7 +37,7 @@
     </div>
 </form>
 
-  <form action="signup.php" style="border:1px solid #ccc">
+  <form style="border:1px solid #ccc">
     <p style="text-align: center;">Nouvel utilisateur ?</p>
     <h1 style="text-align: center;">S'inscrire</h1>
     <hr>
@@ -52,6 +56,7 @@
 
     <form>
       <select [(ngModel)]="quartier" size="1" name="quartier">
+        <option></option>
         <option *ngFor="let item of quartiers">{{item.idQuartier}}</option>
       </select>
     </form>

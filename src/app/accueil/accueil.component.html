@@ -1,7 +1,10 @@
-<p>
-  Salut à tous !!!!!! <br>
-  Bienvenue sur mon site !! ^^ <br>
-  Allez à la route "/utilisateurs" pour avoir le composant qui donne la liste des utilisateurs !!!!<br>
-  Veillez à avoir le serveur SQL correctement lancé (c'est un peu chiant à faire mais si vous avez le workbench ça doit pas être trop dur).
+<
+
+<p *ngIf="connectStatus == false">
+ Vous n'êtes pas connecté : veuillez vous connecter pour accéder aux fantastiques fonctions du site.
 </p>
 
+
+<div *ngIf="connectStatus == true">
+  <a href="/utilisateurs/{{idUser}}">Accès à votre page utilisateur.</a>
+</div>

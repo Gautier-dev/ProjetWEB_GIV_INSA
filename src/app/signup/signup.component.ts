@@ -27,7 +27,7 @@ export class SignupComponent implements OnInit {
 
 
   quartiers = []; // Sera rempli à l'initialisation de la classe
-  quartier = '';
+  quartier = 'Veuillez choisir votre quartier !';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -36,13 +36,11 @@ export class SignupComponent implements OnInit {
   registerStatus = false;
   connectStatus = false;
   idUser: string;
+  verificationDone = false; // Passe à true quand on a vérifié si l'utilisateur était connecté ou non.
 
   constructor(private httpClient: HttpClient, private router: Router, private location: Location, private cookieService: CookieService) {}
 
   ngOnInit() {
-    this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(data => {
-      this.quartiers = data as [JSON];
-    });
 
     // Vérification de l'existence ou non d'un cookie
     if (this.cookieService.check('givinsa_id')) {
@@ -50,8 +48,6 @@ export class SignupComponent implements OnInit {
       this.httpClient.get<UserIdentificationResponse>
       ('http://127.0.0.1:5002/whois/' + this.cookieService.get('givinsa_id')).subscribe(data => {
         // Affichage :
-        console.log(data);
-        console.log(data.idUser);
         if (data.idUser === '') {
           // Cookie invalide (possible si il y a eu une connexion ailleurs) : suppression.
           this.cookieService.delete('givinsa_id');
@@ -62,6 +58,14 @@ export class SignupComponent implements OnInit {
         }
       });
     }
+    // On cherche la liste des quartiers uniquement si c'est nécessaire.
+    if (this.connectStatus === false) {
+      this.httpClient.get('http://127.0.0.1:5002/quartiers').subscribe(resultat => {
+        this.quartiers = resultat as [JSON];
+      });
+    }
+    // Nécessaire pour que les autres composants puissent avoir accès à l'iduser
+    this.verificationDone = true;
   }
 
 
@@ -80,11 +84,14 @@ export class SignupComponent implements OnInit {
           (document.getElementById('pseudo') as HTMLInputElement).value = 'Connexion réussie';
           // Mise en place du cookie (son absence a été vérifiée à l'initialisation de la page)
           this.cookieService.set('givinsa_id', res.cookieValue, 7);
-          // Affichage de l'identifiant
+          location.reload();
+          /* Affichage de l'identifiant
           this.httpClient.get<UserIdentificationResponse>
           ('http://127.0.0.1:5002/whois/' + this.cookieService.get('givinsa_id'))
             .subscribe(content => {this.idUser = content.idUser;
             });
+
+           */
           break;
         }
 
@@ -108,8 +115,6 @@ export class SignupComponent implements OnInit {
     const email = (document.getElementById('email') as HTMLInputElement).value;
     const psw = (document.getElementById('psw') as HTMLInputElement).value;
     const pswrepeat = (document.getElementById('psw-repeat') as HTMLInputElement).value;
-    (document.getElementById('email') as HTMLInputElement).value = 'ton pseudo est : ' + pseudo + ', ton mail est : ' + email
-      + ', ton mdp est : ' + psw + ', ta confirmation de mdp est : ' + pswrepeat;
     if (psw !== pswrepeat) {
       // Affiche une erreur si les champs de mdp ne correspondent pas
       (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Les mots de passe ne matchent pas !';
@@ -127,11 +132,11 @@ export class SignupComponent implements OnInit {
       this.registerStatus = res as boolean;
       switch (this.registerStatus) {
         case true: {
-          (document.getElementById('pseudo1') as HTMLInputElement).value = 'Inscription réussie';
+          (document.getElementById('pswerror') as HTMLInputElement).value = 'Inscription réussie';
           break;
         }
         case false: {
-          (document.getElementById('pseudo1') as HTMLInputElement).value = 'Je n\'ai pas réussi à t\'inscrire je suis désolé(e) :(';
+          (document.getElementById('pswerror') as HTMLInputElement).value = 'Je n\'ai pas réussi à t\'inscrire je suis désolé(e) :(';
           break;
         }
       }

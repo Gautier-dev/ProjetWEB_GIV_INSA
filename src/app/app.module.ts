@@ -17,6 +17,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
+import { ConceptionComponent } from './conception/conception.component';
+import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,8 @@ import {MatButtonModule} from '@angular/material/button';
     UserpageComponent,
     ViewAnnoncesComponent,
     AfficherAnnonceComponent,
-
-
+    ConceptionComponent,
+    ManageAnnoncesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,100 @@
-<p>
-  {{userData | json}}<br>
-</p>
+
+<!-- >
+Vérification de la connexion.
+</!-->
+
+<div *ngIf="connectStatus == false">
+  <h1>
+    Veuillez vous connecter pour acceder aux informations concernant nos membres.
+  </h1>
+</div>
+
+<div *ngIf="connectStatus == true">
+  <!-- >
+  Informations en fonction du lien entre les deux utilisateurs.
+  On vérifie avant toute chose que l'id fournie est correcte et correspond bien à un utilisateur.
+  </!-->
+  <div *ngIf="userData != {}">
+    <h1>
+      Page de {{id}}.
+    </h1>
+    <h2>
+      Voici les informations dont vous disposez sur {{id}}.
+    </h2>
+    <ul *ngFor="let objet of userData">
+      <li *ngFor="let item of (objet | keyvalue)">{{item.key}}: {{item.value}}</li>
+    </ul>
+  </div>
+
+  <!-- >
+  Gestion des contacts.
+  </!-->
+  <div *ngIf="status == 0">
+    <!-- >
+    Amitié non établie.
+    Cas 1 : une demande a eu lieu.
+    Cas 2 : aucune demande.
+    </!-->
+    <div *ngIf="friend == 0">
+      <p *ngIf="responsableDemande == idUser">
+        Vous avez fait une demande en ami à cet utilisateur, mais il ne l'a pas encore acceptée.
+      </p>
+      <div *ngIf="responsableDemande != idUser">
+        <p>
+          L'utilisateur vous a fait une demande d'ami !<br>
+          Quelle popularité !
+        </p>
+        <button (click)="friendAccept()">Cliquez ici pour l'accepter !</button>
+      </div>
+    </div>
+    <div *ngIf="friend == -1">
+      <p>
+        Vous n'êtes pas ami avec cet utilisateur.<br>
+        Vous pouvez faire une demande d'amitié.
+      </p>
+      <button (click)="friendAsk()">Faire une demande</button>
+    </div>
+  </div>
+
+  <div *ngIf="status == 1">
+    <p>
+      Vous êtes ami avec cet utilisateur. Félicitations !<br>
+      Nous espérons que tout va pour le mieux !<br>
+      Si ça n'est pas le cas, vous pouvez toujours le bloquer :
+    </p>
+    <button (click)="friendBlock()">Bloquer l'ami</button>
+  </div>
+
+  <div *ngIf="status == 2">
+    <p>
+      Vous êtes le propriétaire de cette page.<br>
+      Vous pouvez par conséquent la modifier.
+    </p>
+    <h2>
+      Modifications du profil.
+    </h2>
+    <label>Changer de nom : <input type="text" [(ngModel)]="changeName" name="changeNom"><br></label>
+    <button (click)="nameChange()">Appliquer le changement</button><br><br>
+    <label>Changer de prénom : <input [(ngModel)]="changeFirstName" name="changeFirstName"><br></label>
+    <button (click)="firstNameChange()">Appliquer le changement</button><br><br>
+    <label>Changer de numéro de téléphone : <input [(ngModel)]="changePhone" name="changePhone"><br></label>
+    <button (click)="phoneChange()">Appliquer le changement</button><br><br>
+    <label>Changer de mail : <input [(ngModel)]="changeMail" name="changeMail"><br></label>
+    <button (click)="mailChange()">Appliquer le changement</button><br><br>
+    Changer de quartier : <br>
+    <form>
+      <label><select [(ngModel)]="changeQuartier" size="1" name="changeQuartier">
+        <option></option>
+        <option *ngFor="let item of quartiers">{{item.idQuartier}}</option>
+      </select></label>
+    </form>
+    <button (click)="quartierChange()">Appliquer le changement</button><br><br>
+    <h2>Demandes en contact reçues :</h2>
+    <ul>
+      <li *ngFor="let demande of demandesContact">
+        <a href="/utilisateurs/{{demande.idUser1}}">{{demande.idUser1}}</a>
+      </li>
+    </ul>
+  </div>
+
+</div>

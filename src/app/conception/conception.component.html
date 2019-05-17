@@ -1,0 +1,117 @@
+<a href="/">Retour page d'accueil.</a><br>
+<h1>Compte-rendu de la conception de Givinsa</h1><br>
+<h2>L'idée</h2><br>
+<p>
+  Il est important, de nos jours, d'envisager des modèles de sociétés plus écologiques, et cela passe, en partie, avec l'entraide entre particuliers.<br>
+  <br>
+  C'est pourquoi nous proposons Givinsa comme une solution de mise en relation entre particuliers afin d'encourager le don.
+  Ces dons peuvent s'inscrire dans plusieurs catégories : textile, mobilier...<br>
+  L'idée est de regrouper les utilisateurs en communautés de lieu. Nous avons établi ainsi une liste des quartiers de Lyon et les avons associés à leur arrondissement respectif.<br>
+  <br>
+  Les utilisateurs peuvent poster une annonce, et donner l'échelle de celle-ci.<br>
+  Ou bien elle se base sur son quartier, ou bien sur l'arrondissement, ou bien elle est visible dans tout Lyon.
+  Ainsi, seuls les utilisateurs concernés voient l'annonce.<br>
+  Afin de faire l'acquisition du bien, un utilisateur doit prendre contact avec son propriétaire.<br>
+  Pour ce faire, il doit le demander en contact afin d'obtenir ses coordonnées (téléphone, mail...).<br>
+  Ainsi, le propriétaire de l'annonce pourra lui donner l'état "don en cours", et la supprimer quand le don aura effectivement été fait.<br>
+  <br>
+  Entrons dans le détail à présent.
+</p>
+<h1>Le modèle Modèle-Vue-Controlleur</h1>
+<h2>Le modèle : la base de données MySql</h2>
+<p>
+  Nous avons choisi d'utiliser une base de données mysql.<br>
+  Les relations entre tables nous paraissaient appropriées pour représenter annonces, utilisateurs, etc.<br>
+</p>
+<h3>Tables :</h3>
+<h4>Intérêts</h4>
+<p>
+  Représente les différents intérêts que l'on peut donner à une annonce (Textile, Mobilier, Electroménager, Alimentaire, Jouets, Jeux vidéos, Décoratif, Récup ou Livres).<br>
+  (<strong>idInteret</strong>,nom)<br>
+</p>
+  <ul>
+    <li>idIntérêt : entier, clé primaire, identifie l'intérêt dans les autres tables.</li>
+    <li>nom : texte, nom de l'intérêt.</li>
+</ul>
+<h4>Quartiers</h4>
+<p>
+  Représente les différents quartiers avec lesquels un utilisateur peut s'inscrire, et les lie à leur arrondissement.<br>
+  (<strong>idQuartier</strong>,arrondissement)<br>
+</p>
+<ul>
+  <li>idQuartier : varchar(64), clé primaire, nom du quartier</li>
+  <li>arrondissement : entier, numéro de l'arrondissement associé au quartier.</li>
+</ul>
+<h4>Utilisateurs</h4>
+<p>
+  Liste les différents utilisateurs de la plateforme.<br>
+  (<strong>idUser</strong>,nom,prenom,mail,telephone,idQuartier,password)<br>
+</p>
+<ul>
+  <li>idUser : varchar(64), clé primaire, identifiant de l'utilisateur (ne doit pas contenir d'espace ou de caractères spéciaux !)</li>
+  <li>nom : text, nom de famille de l'utilisateur (optionnel)</li>
+  <li>prenom : text, prénom de l'utilisateur (optionnel)</li>
+  <li>mail : text, adresse mail de l'utilisateur (optionnel)</li>
+  <li>telephone : text, numéro de téléphone de l'utilisateur (optionnel)</li>
+  <li>idQuartier : varchar(64), quartier de l'utilsateur. Clé avec la table Quartiers.</li>
+  <li>password : text, hash du mot de passe de l'utilisateur.</li>
+</ul>
+<h4>Contacts</h4>
+<p>
+  Pour obtenir les informations d'un utilisateur (téléphone, mail, nom, prénom), il faut devenir son contact.<br>
+  Cela se traduit à partir de cette table.<br>
+  (<strong>idUser1</strong>,<strong>idUser2</strong>,relation)<br>
+</p>
+<ul>
+  <li>idUser1 : varchar(64), élément de la clé primaire, identifiant de l'utilisateur ayant initié la relation, clé avec la table utilisateurs.</li>
+  <li>idUser2 : varchar(64), élément de la clé primaire, identifiant de l'autre utilisateur, clé avec la table utilisateurs.</li>
+  <li>relation : entier décrivant la relation entre les deux personnes.</li>
+</ul>
+<p>
+  On considère que pour relation = 0, la demande a été faite par l'utilisateur idUser1 à l'autre utilisateur.<br>
+  Pour relation = 1, la la demande a été acceptée, et les deux utilisateurs peuvent voir les informations de l'autre.<br>
+  Pour retirer un contact, on retire l'entrée de la table.
+</p>
+<h4>Annonce</h4>
+<p>
+  Cette table recense les annonces postées par les utilisateurs.<br>
+  (<strong>idAnnonce</strong>,idUser,idInteret,description,titre,echelle,etat)<br>
+</p>
+<ul>
+  <li>idAnnonce : int, clé primaire, identifiant de l'annonce.</li>
+  <li>idUser : varchar(64), clé avec la table utilisateurs.</li>
+  <li>idInteret : int, clé avec la table intérêts.</li>
+  <li>description et titres : textes décrivant l'annonce.</li>
+  <li>echelle : entier permettant de savoir si l'annonce doit être diffusée dans tout Lyon, dans l'arrondissement ou dans le quartier uniquement.</li>
+  <li>etat : entier à 1 si l'annonce n'a pas été réclamée par un utilisateur, 0 sinon (en attente que le don soit fait, donc).</li>
+</ul>
+<p>
+  A noter qu'il n'est pas nécessaire de donner l'idQuartier dans cette annonce puisque la table idUser porte l'information.
+</p>
+<h4>Cookies</h4>
+<p>
+  Cette table associe les utilisateurs aux valeurs de leurs cookies, leur permettant de garder leur session ouverte et de naviguer sur le site en étant reconnus.<br>
+  (<strong>idUser</strong>,value)
+</p>
+<ul>
+  <li>idUser : varchar(64),clé primaire et avec la table utilisateurs</li>
+  <li>value : un entier que l'utilisateur aura stocké dans un cookie afin qu'on puisse le reconnaître.</li>
+</ul>
+<br>
+
+<h2>Le controlleur : le serveur Flask</h2>
+<p>
+  Nous avons choisi d'utiliser la librairie Flask-RESTful de Python afin de créer le controlleur.<br>
+  Celui-ci possède de nombreuses routes lui permettant de modifier la base de données.<br>
+  Nous utilisons les méthodes GET, POST, PUT et DELETE.<br>
+  Nous avons tâché de minimiser le nombre de routes.<br>
+  <br>
+  Les arguments sont passés dans les URL (la plupart du temps, les idUser ou des valeurs précisant l'action à effectuer).<br>
+  Pour les POST et les PUT, les informations à ajouter ou modifier sont décrites dans le corps du message HTTP.
+</p>
+
+<h2>La vue : Angular</h2>
+<p>
+  Nous utilisons Angular pour générer la vue de l'utilisateurs.<br>
+</p>
+  <h1>A FINIR : faire la liste des pages et composants d'Angular ! (pas la peine de décrire chaque route flask je pense)</h1>
