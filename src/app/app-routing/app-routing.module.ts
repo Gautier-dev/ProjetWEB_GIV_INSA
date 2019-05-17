@@ -13,13 +13,12 @@ import { ManageAnnoncesComponent } from '../manage-annonces/manage-annonces.comp
 
 
 const routes: Routes = [
-  {path: 'utilisateurs', component: ListeUtilisateursComponent},
-  {path: '', component: AccueilComponent},
-  {path: 'annonces/add', component: AddAnnonceComponent},
-  {path: 'signup', component: SignupComponent},
+  {path: '', component: SignupComponent},
   {path: 'utilisateurs/:id', component: UserpageComponent},
-  {path: 'annonces/view', component: ViewAnnoncesComponent},
+  {path: 'utilisateurs', component: ListeUtilisateursComponent},
   {path: 'conception', component: ConceptionComponent},
+  {path: 'annonces/view', component: ViewAnnoncesComponent},
+  {path: 'annonces/add', component: AddAnnonceComponent},
   {path: 'annonces/manage', component: ManageAnnoncesComponent}
 ];
 
