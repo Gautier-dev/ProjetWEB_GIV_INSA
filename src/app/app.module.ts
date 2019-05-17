@@ -11,6 +11,12 @@ import {FormsModule} from '@angular/forms';
 import { SignupComponent } from './signup/signup.component';
 import { UserpageComponent } from './userpage/userpage.component';
 import { ViewAnnoncesComponent } from './view-annonces/view-annonces.component';
+import { AfficherAnnonceComponent} from './afficher-annonce/afficher-annonce.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
 import { ConceptionComponent } from './conception/conception.component';
 import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
 
@@ -23,6 +29,7 @@ import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.compo
     SignupComponent,
     UserpageComponent,
     ViewAnnoncesComponent,
+    AfficherAnnonceComponent,
     ConceptionComponent,
     ManageAnnoncesComponent
   ],
@@ -30,7 +37,12 @@ import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.compo
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    NgbModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatSelectModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -8,6 +8,7 @@ import { AddAnnonceComponent } from '../add-annonce/add-annonce.component';
 import { SignupComponent} from '../signup/signup.component';
 import { UserpageComponent } from '../userpage/userpage.component';
 import { ViewAnnoncesComponent } from '../view-annonces/view-annonces.component';
+import {AfficherAnnonceComponent} from '../afficher-annonce/afficher-annonce.component';
 import { ConceptionComponent} from '../conception/conception.component';
 import { ManageAnnoncesComponent } from '../manage-annonces/manage-annonces.component';
 
