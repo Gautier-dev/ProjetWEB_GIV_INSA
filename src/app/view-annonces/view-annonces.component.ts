@@ -18,6 +18,7 @@ export class ViewAnnoncesComponent implements OnInit {
 
   annonces: [JSON];
   annonceSelect: JSON;
+  idUser: string;
 
   search() {
     this.httpClient.get('http://127.0.0.1:5002/annonces/' + this.interet + '/' + this.idQuartier).subscribe(data => {
@@ -36,7 +37,9 @@ export class ViewAnnoncesComponent implements OnInit {
       this.interets = data as [JSON];
     });
     // TEMPORAIRE : devra être défini à l'aide de l'authentification.
-    this.idQuartier = 'Part-Dieu';
+    this.httpClient.get('http://127.0.0.1:5002/quartier/' + this.idUser).subscribe(data => {
+      this.idQuartier = data as string;
+    });
   }
 
 
