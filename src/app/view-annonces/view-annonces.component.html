@@ -1,55 +1,56 @@
 
-
+<p> {{echelle}}</p>
 <h4>Choix du type d'objet</h4>
 <mat-form-field>
-  <mat-label>type</mat-label>
+  <mat-label>{{nominteret}}</mat-label>
   <mat-select [(ngModel)]="interet" size="1" name="interet">
-    <mat-option *ngFor="let item of interets">
+    <mat-option *ngFor="let item of interets" (click)="interetSelect(item.idInteret, item.nom)">
       {{item.nom}}
     </mat-option>
   </mat-select>
 </mat-form-field>
-
-
 <button mat-stroked-button color="warn" (click)="search()">Chercher les annonces chaudes de ta région</button>
 
 <mat-drawer-container class="example-container">
   <mat-drawer mode="side" opened>
-    <div class="list-group">
-
-      <button *ngFor="let annonce of annonces" type="button" (click)="annonce(annonce)" class="list-group-item list-group-item-action">{{annonce.titre}}</button>
-
+    <p *ngIf="searchOK==false">Recherche</p>
+    <div class="list-group" *ngIf="searchOK==true">
+      <button *ngFor="let annonce2 of annonces" type="button" (click)="annonce(annonce2)" class="list-group-item list-group-item-action">
+        {{annonce2.titre}}</button>
     </div>
+
+
   </mat-drawer>
-  <mat-drawer-content>
+  <p *ngIf="searchOK==false">Recherche</p>
+  <mat-drawer-content *ngIf="searchOK==true">
     <ngb-tabset>
       <ngb-tab>
         <ng-template ngbTabTitle><b>Description</b></ng-template>
         <ng-template ngbTabContent>
-          <p>{{annonceSelect.description}}</p>
+          <p>{{description}}</p>
         </ng-template>
       </ngb-tab>
-
       <ngb-tab>
         <ng-template ngbTabTitle>Details</ng-template>
         <ng-template ngbTabContent>
-          <p>{{annonceSelect.idUser}}</p>
-          <p>{{annonceSelect.echelle}}</p>
-          <p *ngIf="annonceSelect.etat === 1">
+          <p>{{UserAnonce}}</p>
+          <p>{{echelle}}</p>
+          <p *ngIf="etat === 1">
             Disponible
             </p>
-          <p *ngIf="annonceSelect.etat === 1">
+          <p *ngIf="etat === 0">
             Réservé
           </p>
 
         </ng-template>
       </ngb-tab>
-
     </ngb-tabset>
-
     <button mat-stroked-button color="warn" (click)="post()">Contacter l'annonceur</button>
   </mat-drawer-content>
 </mat-drawer-container>
 
-
+<!--
 <p>{{annonces | json}}</p>
+<p>{{interet}}</p>
+-->
+

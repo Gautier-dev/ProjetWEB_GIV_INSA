@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+
 import { AppComponent } from './app.component';
 import { ListeUtilisateursComponent } from './liste-utilisateurs/liste-utilisateurs.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -20,6 +21,11 @@ import {MatButtonModule} from '@angular/material/button';
 import { ConceptionComponent } from './conception/conception.component';
 import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
 import { CompteGestionComponent } from './compte-gestion/compte-gestion.component';
+import {CookieService} from 'ngx-cookie-service';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+
+
+
 
 @NgModule({
   declarations: [
@@ -44,9 +50,11 @@ import { CompteGestionComponent } from './compte-gestion/compte-gestion.componen
     BrowserAnimationsModule,
     MatSidenavModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+platformBrowserDynamic().bootstrapModule(AppModule);
