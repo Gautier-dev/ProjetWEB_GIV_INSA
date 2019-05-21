@@ -1,9 +1,22 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Bienvenue à GivInsa !
-  </h1>
-  <img width="300" alt="Logo" src="assets/img/logoVersionDefinitive.png">
+<div class="topleft">
+  <a href="/"><img width="100" alt="Logo" src="assets/img/logoVersionDefinitive.png"></a>
+  <h1>sup</h1>
+</div>
+
+<div class="topnav">
+  <a class="active" href="">Accueil</a>
+  <a href="annonces/add">Créer une annonce</a>
+  <a href="parametres">Paramètres</a>
+  <a href="about">À propos</a>
+</div>
+
+<div>
+  <a href="">
+    <label (click)="bye()" style="cursor: pointer">
+      Logout
+    </label>
+  </a>
 </div>
 
 <router-outlet></router-outlet>

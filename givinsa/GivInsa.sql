@@ -71,6 +71,32 @@ LOCK TABLES `contacts` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `cookies`
+--
+
+DROP TABLE IF EXISTS `cookies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `cookies` (
+  `idUser` varchar(64) NOT NULL,
+  `value` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idUser`),
+  UNIQUE KEY `cookies_value_uindex` (`value`),
+  CONSTRAINT `cookies_utilisateurs` FOREIGN KEY (`idUser`) REFERENCES `utilisateurs` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Table permettant de retrouver la session et donc l''id de l''utilisateur';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cookies`
+--
+
+LOCK TABLES `cookies` WRITE;
+/*!40000 ALTER TABLE `cookies` DISABLE KEYS */;
+INSERT INTO `cookies` VALUES ('salut',6166612);
+/*!40000 ALTER TABLE `cookies` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `interets`
 --
 
@@ -92,34 +118,6 @@ LOCK TABLES `interets` WRITE;
 /*!40000 ALTER TABLE `interets` DISABLE KEYS */;
 INSERT INTO `interets` VALUES (1,'Textile'),(2,'Mobilier'),(3,'Electroménager'),(4,'Alimentaire'),(5,'Jouets'),(6,'Jeux vidéos'),(7,'Décoratif'),(8,'Récup'),(9,'Livres');
 /*!40000 ALTER TABLE `interets` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `liensinterets`
---
-
-DROP TABLE IF EXISTS `liensinterets`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `liensinterets` (
-  `idUser` varchar(64) NOT NULL,
-  `idInteret` int(11) NOT NULL,
-  `notification` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idUser`,`idInteret`),
-  KEY `liensinterets_interets` (`idInteret`),
-  CONSTRAINT `liensinterets_interets` FOREIGN KEY (`idInteret`) REFERENCES `interets` (`idInteret`),
-  CONSTRAINT `liensinterets_utilisateurs` FOREIGN KEY (`idUser`) REFERENCES `utilisateurs` (`idUser`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `liensinterets`
---
-
-LOCK TABLES `liensinterets` WRITE;
-/*!40000 ALTER TABLE `liensinterets` DISABLE KEYS */;
-INSERT INTO `liensinterets` VALUES ('admin',1,0),('admin',2,0),('admin',3,0),('admin',4,1),('admin',5,0),('admin',6,0),('admin',7,1),('admin',8,1),('admin',9,0);
-/*!40000 ALTER TABLE `liensinterets` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -186,4 +184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-10 16:43:01
+-- Dump completed on 2019-05-13 18:48:20

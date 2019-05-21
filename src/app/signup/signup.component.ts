@@ -18,7 +18,7 @@ interface UserIdentificationResponse {
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  providers: [ CookieService ],
+  providers: [CookieService],
   styleUrls: ['./signup.component.css']
 })
 
