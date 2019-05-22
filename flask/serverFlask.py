@@ -24,7 +24,7 @@ class Database:
       host = "localhost"
       user = "root"
       password = "123"
-      db = "givinsa2"
+      db = "givinsa"
       self.con = pymysql.connect(host=host, user=user, password=password, db=db, cursorclass=pymysql.cursors.
                                  DictCursor)
       self.cur = self.con.cursor()
