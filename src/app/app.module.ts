@@ -20,6 +20,11 @@ import {MatButtonModule} from '@angular/material/button';
 import { ConceptionComponent } from './conception/conception.component';
 import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
 import { CompteGestionComponent } from './compte-gestion/compte-gestion.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatCardModule} from '@angular/material/card';
+
 
 @NgModule({
   declarations: [
@@ -37,14 +42,18 @@ import { CompteGestionComponent } from './compte-gestion/compte-gestion.componen
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
     NgbModule,
-    BrowserAnimationsModule,
     MatSidenavModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,42 +1,71 @@
+<!--
 <div *ngIf="connectStatus === true">
-  <p>
-    Veuillez entrer les détails de votre annonce :<br>
+-->
 
-    Nom de l'annonce : <input [(ngModel)]="titre" placeholder="titre"><br>
-    Description de l'annonce : <input [(ngModel)]="description" placeholder="description"><br><br>
+<div class="form-annonce">
+  <div class="container">
+  <p style="font-weight:bold; text-align:center">
+    <span style="font-family: 'Arial'; text-transform: uppercase;">Veuillez entrer les détails de votre annonce :</span><br></p><p style="font-weight:bold">
+<!--
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput [(ngModel)]="titre" placeholder="Titre">
+    </mat-form-field>
 
-    Choix de la portée de l'annonce :<br>
-  </p>
+    <mat-form-field class="example-full-width">
+      <textarea matInput [(ngModel)]="description" placeholder="Description"></textarea>
+    </mat-form-field>
 
-    <form name="portée"> <!--Choix de la portée de l'annonce-->
-      <label>
-        <input [(ngModel)]="scale" type="radio" value="1" [ngModelOptions]="{standalone: true}">
-        Quartier
+  <label id="example-radio-group-label">Portée de l'annonce :</label>
+  <mat-radio-group
+    aria-labelledby="example-radio-group-label"
+    class="example-radio-group">
+    <mat-radio-button class="example-radio-button" [(ngModel)]="scale" type="radio" value="1" [ngModelOptions]="{standalone: true}">
+      Mon quartier
+    </mat-radio-button>
+    <mat-radio-button class="example-radio-button" [(ngModel)]="scale" type="radio" value="2" [ngModelOptions]="{standalone: true}">
+      Mon arrondissement
+    </mat-radio-button>
+    <mat-radio-button class="example-radio-button" [(ngModel)]="scale" type="radio" value="3" [ngModelOptions]="{standalone: true}">
+      Lyon
+    </mat-radio-button>
+  </mat-radio-group>
+
+  </form>
+  -->
+      Nom de l'annonce : <input [(ngModel)]="titre" placeholder="Titre" style="float:right; width: auto"><br><br>
+    Description : <textarea [(ngModel)]="description" placeholder="Description" style="float:right; width: auto"></textarea><br><br>
+    <br>
+      Portée de l'annonce :<br>
+    </p>
+
+      <form name="portée"> <!--Choix de la portée de l'annonce-->
+      <label style="margin-left: 10px; font-size:15px">
+        <input [(ngModel)]="scale" type="radio" value="1" [ngModelOptions]="{standalone: true}" style="margin-right: 5px;">
+        Mon quartier
       </label><br/>
-      <label>
-        <input [(ngModel)]="scale" type="radio" value="2" [ngModelOptions]="{standalone: true}">
-        Arrondissement
+      <label style="margin-left: 10px; font-size:15px">
+        <input [(ngModel)]="scale" type="radio" value="2" [ngModelOptions]="{standalone: true}" style="margin-right: 5px;">
+        Mon arrondissement
       </label><br/>
-      <label>
-        <input [(ngModel)]="scale" type="radio" value="3" [ngModelOptions]="{standalone: true}">
+      <label style="margin-left: 10px; font-size:15px">
+        <input [(ngModel)]="scale" type="radio" value="3" [ngModelOptions]="{standalone: true}" style="margin-right: 5px;">
         Lyon
       </label><br/>
     </form>
 
-  <p>Choix de la catégorie : </p> <!--Choix de l'intérêt de l'annonce.-->
+    <br>
+  <p style="font-weight:bold">Choix de la catégorie : </p> <!--Choix de l'intérêt de l'annonce.-->
   <form>
     <label *ngFor="let item of interests">
       <input [(ngModel)]="numInteret" type="radio" value="{{item.idInteret}}" [ngModelOptions]="{standalone: true}">
       {{item.nom}}<br>
     </label>
   </form>
-  <p>
-    Résumé :<br>
-    {{titre}} : {{description}}<br>
-    {{scale}},{{numInteret}}<br>
-    {{status}}
-  </p>
 
-  <button (click)="post()">Cliquez ici pour publier l'annonce.</button>
-
+  </div>
+  <br>
+  <div style="text-align: center;">
+  <button (click)="post()" style="text-align: center;">Cliquez ici pour publier l'annonce.</button>
+  </div>
 </div>
