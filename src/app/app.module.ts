@@ -21,13 +21,14 @@ import {MatButtonModule} from '@angular/material/button';
 import { ConceptionComponent } from './conception/conception.component';
 import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.component';
 import { CompteGestionComponent } from './compte-gestion/compte-gestion.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
 import {CookieService} from 'ngx-cookie-service';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
-
-
 
 @NgModule({
   declarations: [
@@ -50,10 +51,13 @@ import {MatCardModule} from '@angular/material/card';
     AppRoutingModule,
     FormsModule,
     NgbModule,
-    MatTabsModule,
     MatSidenavModule,
     MatSelectModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatTabsModule,
     MatListModule,
     MatCardModule
   ],
