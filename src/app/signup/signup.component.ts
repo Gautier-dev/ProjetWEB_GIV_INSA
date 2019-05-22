@@ -81,7 +81,7 @@ export class SignupComponent implements OnInit {
       this.connectStatus = res.success;
       switch (this.connectStatus) {
         case true: {
-          (document.getElementById('pseudo') as HTMLInputElement).value = 'Connexion réussie';
+          (document.getElementById('pswerror1') as HTMLInputElement).innerHTML = 'Connexion réussie';
           // Mise en place du cookie (son absence a été vérifiée à l'initialisation de la page)
           this.cookieService.set('givinsa_id', res.cookieValue, 7);
           location.reload();
@@ -96,7 +96,7 @@ export class SignupComponent implements OnInit {
         }
 
         case false: {
-          (document.getElementById('pseudo') as HTMLInputElement).value = 'Je n\'ai pas réussi à te connecter je suis désolé(e) :(';
+          (document.getElementById('pswerror1') as HTMLInputElement).innerHTML = 'Connexion impossible';
           break;
         }
       }
@@ -110,37 +110,43 @@ export class SignupComponent implements OnInit {
   submit() {
     // Supprime l'eventuelle erreur de mdp
     (document.getElementById('pswerror') as HTMLInputElement).innerHTML = '';
-    // Recupere le textes des champs
+    // Annule si le pseudo contient des caractères spéciaux
     const pseudo = (document.getElementById('pseudo') as HTMLInputElement).value;
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const psw = (document.getElementById('psw') as HTMLInputElement).value;
-    const pswrepeat = (document.getElementById('psw-repeat') as HTMLInputElement).value;
-    if (psw !== pswrepeat) {
-      // Affiche une erreur si les champs de mdp ne correspondent pas
-      (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Les mots de passe ne matchent pas !';
-      // Efface les champs de mdp
-      (document.getElementById('psw') as HTMLInputElement).value = '';
-      (document.getElementById('psw-repeat') as HTMLInputElement).value = '';
-    }
-    const data = {
-      idUser: pseudo,
-      mail: email,
-      password: psw,
-      idQuartier: this.quartier,
-    };
-    this.httpClient.post('http://127.0.0.1:5002/signup', data, this.httpOptions).subscribe(res => {
-      this.registerStatus = res as boolean;
-      switch (this.registerStatus) {
-        case true: {
-          (document.getElementById('pswerror') as HTMLInputElement).value = 'Inscription réussie';
-          break;
-        }
-        case false: {
-          (document.getElementById('pswerror') as HTMLInputElement).value = 'Je n\'ai pas réussi à t\'inscrire je suis désolé(e) :(';
-          break;
-        }
+    if (pseudo.replace(/[^A-Za-z]/g, '').replace(/\s/g, '') !== pseudo) {
+      (document.getElementById('pswerror') as HTMLInputElement)
+        .innerHTML = 'L\'inscription n\'a pas abouti : votre pseudo contient des caractères spéciaux.';
+    } else {
+      // Recupere le textes des champs
+      const email = (document.getElementById('email') as HTMLInputElement).value;
+      const psw = (document.getElementById('psw') as HTMLInputElement).value;
+      const pswrepeat = (document.getElementById('psw-repeat') as HTMLInputElement).value;
+      if (psw !== pswrepeat) {
+        // Affiche une erreur si les champs de mdp ne correspondent pas
+        (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Les mots de passe ne matchent pas !';
+        // Efface les champs de mdp
+        (document.getElementById('psw') as HTMLInputElement).value = '';
+        (document.getElementById('psw-repeat') as HTMLInputElement).value = '';
       }
-    });
-
+      const data = {
+        idUser: pseudo,
+        mail: email,
+        password: psw,
+        idQuartier: this.quartier,
+      };
+      this.httpClient.post('http://127.0.0.1:5002/signup', data, this.httpOptions).subscribe(res => {
+        this.registerStatus = res as boolean;
+        switch (this.registerStatus) {
+          case true: {
+            (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Inscription réussie';
+            break;
+          }
+          case false: {
+            // tslint:disable-next-line:max-line-length
+            (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'L\'inscription n\'a pas abouti : vos identifiants sont déjà utilisés.';
+            break;
+          }
+        }
+      });
+    }
   }
 }
