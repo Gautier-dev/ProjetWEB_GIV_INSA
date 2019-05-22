@@ -1,10 +1,9 @@
 .example-container {
-  min-height: 1000px;
+  min-height: 500px;
   height: auto;
   width: auto;
   min-width: 100%;
-  margin: 10px;
-
+  margin: 1px;
 }
 
 

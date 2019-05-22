@@ -33,7 +33,7 @@ export class AddAnnonceComponent implements OnInit {
   scale = '';
   status = 0;
   interests = []; // Sera rempli à l'initialisation de la classe
-
+  nominteret = "interet";
 
   constructor(private httpClient: HttpClient, private router: Router, private location: Location, private cookieService: CookieService) {
   }
@@ -62,7 +62,10 @@ export class AddAnnonceComponent implements OnInit {
       });
     }
   }
-
+  interetSelect(int, nom) {
+    this.numInteret = int;
+    this.nominteret = nom;
+  }
 
   post() {
     const data = {

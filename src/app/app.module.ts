@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+
 import { AppComponent } from './app.component';
 import { ListeUtilisateursComponent } from './liste-utilisateurs/liste-utilisateurs.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -23,8 +24,11 @@ import { CompteGestionComponent } from './compte-gestion/compte-gestion.componen
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioModule} from '@angular/material/radio';
+import {CookieService} from 'ngx-cookie-service';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
-
 
 @NgModule({
   declarations: [
@@ -53,9 +57,12 @@ import {MatCardModule} from '@angular/material/card';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    MatTabsModule,
+    MatListModule,
     MatCardModule
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+platformBrowserDynamic().bootstrapModule(AppModule);

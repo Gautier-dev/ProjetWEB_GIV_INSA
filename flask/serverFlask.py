@@ -365,14 +365,11 @@ class QuartierUser(Resource):
     :return: quartier de l'utilisateur
     """
     db = Database()
-    cur = db.query("SELECT COUNT(*) FROM utilisateurs WHERE value = %s",
-                   user)  # On regarde si le pseudo existe
-    if not cur.fetchone()['COUNT(*)']:  # Le pseudo n'existe pas.
-      return {'success': False, 'idUser': ''}
-    else:
-      cur2 = db.query("SELECT idQuartier FROM utilisateur WHERE idUser = %s", user)
-      res = cur2.fetchall()
-      return {'success': True, 'idUser': res[0]['idQuartier']}
+
+    cur2 = db.query("SELECT idQuartier FROM utilisateurs WHERE idUser = %s", user)
+    res = cur2.fetchall()
+    print(res)
+    return {'success': True, 'idQuartier': res[0]['idQuartier']}
 
 
 
