@@ -25,7 +25,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatListModule} from '@angular/material/list';
-
+import {MatCardModule} from '@angular/material/card';
 
 
 
@@ -54,8 +54,8 @@ import {MatListModule} from '@angular/material/list';
     MatSidenavModule,
     MatSelectModule,
     MatButtonModule,
-    MatListModule
-
+    MatListModule,
+    MatCardModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

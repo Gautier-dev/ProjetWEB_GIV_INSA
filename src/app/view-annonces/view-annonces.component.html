@@ -1,5 +1,3 @@
-
-<p> {{echelle}}</p>
 <h4>Choix du type d'objet</h4>
 <mat-form-field>
   <mat-label>{{nominteret}}</mat-label>
@@ -11,39 +9,73 @@
 </mat-form-field>
 <button mat-stroked-button color="warn" (click)="search()">Chercher les annonces chaudes de ta région</button>
 
-<mat-drawer-container class="example-container"  *ngIf="searchOK==true">
-  <mat-drawer mode="side" opened>
+<mat-sidenav-container class="example-container" *ngIf="searchOK==true">
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened">
     <mat-list role="list">
       <mat-list-item role="listitem" *ngFor="let annonce2 of annonces" >
       <button mat-button (click)="annonce(annonce2)">
         {{annonce2.titre}}</button>
+        <mat-divider></mat-divider>
       </mat-list-item>
-    </mat-list>
-  </mat-drawer>
-  <mat-drawer-content>
-    <mat-tab-group animationDuration="0ms">
-      <mat-tab label="description">
 
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Description">
+        <p><button mat-button (click)="sidenav.toggle()">Afficher les annonces</button></p>
           <p>{{description}}</p>
 
       </mat-tab>
-      <mat-tab label="Details">
+      <mat-tab label="Détails">
+        <mat-card class="example-card">
+          <mat-card-header>
+            <mat-card-title>
+              Annonceur
+            </mat-card-title>
+          </mat-card-header>
+            <mat-card-content>
+              {{UserAnnonce}}
+            </mat-card-content>
 
-          <p>{{UserAnonce}}</p>
-          <p>{{echelle}}</p>
-          <p *ngIf="etat === 1">
-            Disponible
+        </mat-card>
+        <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title>
+            Visibilité
+          </mat-card-title>
+        </mat-card-header>
+          <mat-card-content *ngIf="echelle==3">
+            Lyon
+          </mat-card-content>
+          <mat-card-content *ngIf="echelle==2">
+            Arrondissement
+          </mat-card-content>
+          <mat-card-content *ngIf="echelle==1">
+            {{idQuartier}}
+          </mat-card-content>
+
+        </mat-card>
+        <mat-card class="example-card">
+          <mat-card-header>
+            <mat-card-title>
+              Status
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p *ngIf="etat === 1">
+              Disponible
             </p>
-          <p *ngIf="etat === 0">
-            Réservé
-          </p>
-
-
+            <p *ngIf="etat === 0">
+              Réservé
+            </p>
+          </mat-card-content>
+        </mat-card>
       </mat-tab>
     </mat-tab-group>
-    <button mat-stroked-button color="warn" (click)="post()">Contacter l'annonceur</button>
-  </mat-drawer-content>
-</mat-drawer-container>
+    <a mat-stroked-button color="warn" routerLink="/utilisateurs/{{UserAnnonce}}">Contacter l'annonceur</a>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
 <!--
 <p>{{annonces | json}}</p>
