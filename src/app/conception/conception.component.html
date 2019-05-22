@@ -1,32 +1,59 @@
 <a href="/">Retour page d'accueil.</a><br>
-<h1>Compte-rendu de la conception de Givinsa</h1><br>
-<h2>L'idée</h2><br>
+<h1>Compte-rendu de la conception de Givinsa :</h1><br>
+<h1>L'idée</h1>
 <p>
-  Il est important, de nos jours, d'envisager des modèles de sociétés plus écologiques, et cela passe, en partie, avec l'entraide entre particuliers.<br>
+  Il est important de nos jours, d'envisager des modèles de sociétés plus écologiques, et cela passe en partie, par l'entraide de particuliers.
   <br>
+  S'il existe d'ores et déjà plusieurs sites permettant d'échanger des biens, nous souhaitons que ce procédé s'effectue à petite échelle et de manière gratuite.
   C'est pourquoi nous proposons Givinsa comme une solution de mise en relation entre particuliers afin d'encourager le don.
-  Ces dons peuvent s'inscrire dans plusieurs catégories : textile, mobilier...<br>
   L'idée est de regrouper les utilisateurs en communautés de lieu. Nous avons établi ainsi une liste des quartiers de Lyon et les avons associés à leur arrondissement respectif.<br>
   <br>
-  Les utilisateurs peuvent poster une annonce, et donner l'échelle de celle-ci.<br>
-  Ou bien elle se base sur son quartier, ou bien sur l'arrondissement, ou bien elle est visible dans tout Lyon.
-  Ainsi, seuls les utilisateurs concernés voient l'annonce.<br>
+  En passant par nos services, les utilisateurs peuvent poster une annonce et préciser ses caractéristiques :
+</p>
+<ul>
+    <li>la catégorie : textile, mobiler...</li>
+    <li>l'échelle : annonce pour le quartier, l'arrondissement ou la ville</li>
+    <li>la description : pour donner plus de détails</li>
+</ul>
+<p>
+  Les annonces ne sont visibles que par les utilisateurs concernés par l'échelle. Pour ce faire, chaque utilisateur doit rentrer son quartier lors de la création d'un compte.
+  <br>
   Afin de faire l'acquisition du bien, un utilisateur doit prendre contact avec son propriétaire.<br>
   Pour ce faire, il doit le demander en contact afin d'obtenir ses coordonnées (téléphone, mail...).<br>
-  Ainsi, le propriétaire de l'annonce pourra lui donner l'état "don en cours", et la supprimer quand le don aura effectivement été fait.<br>
+  Ainsi, le propriétaire de l'annonce pourra changer l'état de l'annonce en "don en cours", et la supprimer quand le don aura effectivement été fait.<br>
   <br>
-  Entrons dans le détail à présent.
 </p>
+
+
+<h1>Fonctionnalités !!!!!!!!!!!!!!!!!!!! A COMPLETER </h1>
+<ul>
+  <li>
+    <p>
+      <b>Inscription</b>
+      <br>
+      adad
+    </p>
+  </li>
+  <li>
+    <p>
+      <b>qqchose</b>
+      <br>
+      babab
+    </p>
+  </li>
+</ul>
+
 <h1>Le modèle Modèle-Vue-Controlleur</h1>
-<h2>Le modèle : la base de données MySql</h2>
+<h2>Le modèle : serveur MySql</h2>
 <p>
-  Nous avons choisi d'utiliser une base de données mysql.<br>
+  Nous avons choisi d'utiliser un serveur mysql.<br>
   Les relations entre tables nous paraissaient appropriées pour représenter annonces, utilisateurs, etc.<br>
+  Les tables utilisées sont en FNBC (Forme Normale de Boyce-Codd). Cela permet permet d'avoir une base de données plus efficace.<br>
 </p>
 <h3>Tables :</h3>
 <h4>Intérêts</h4>
 <p>
-  Représente les différents intérêts que l'on peut donner à une annonce (Textile, Mobilier, Electroménager, Alimentaire, Jouets, Jeux vidéos, Décoratif, Récup ou Livres).<br>
+  Représente les différentes catégories que l'on peut donner à une annonce (Textile, Mobilier, Electroménager, Alimentaire, Jouets, Jeux vidéos, Décoratif, Récup ou Livres).<br>
   (<strong>idInteret</strong>,nom)<br>
 </p>
   <ul>
@@ -101,17 +128,79 @@
 
 <h2>Le controlleur : le serveur Flask</h2>
 <p>
-  Nous avons choisi d'utiliser la librairie Flask-RESTful de Python afin de créer le controlleur.<br>
+  Nous avons choisi d'utiliser la librairie Flask-RESTful de Python afin de créer le controlleur, avec son interface de programmation REST (API)<br>
   Celui-ci possède de nombreuses routes lui permettant de modifier la base de données.<br>
   Nous utilisons les méthodes GET, POST, PUT et DELETE.<br>
   Nous avons tâché de minimiser le nombre de routes.<br>
   <br>
   Les arguments sont passés dans les URL (la plupart du temps, les idUser ou des valeurs précisant l'action à effectuer).<br>
-  Pour les POST et les PUT, les informations à ajouter ou modifier sont décrites dans le corps du message HTTP.
+  Pour les POST et les PUT, les informations à ajouter ou modifier sont décrites dans le corps du message HTTP. <br>
+  <br>
+  Pour communiquer dans l'API, Flask utilise les routes suivantes : <br>
+  <img src="assets/img/routeFLASK.png">
+
 </p>
 
 <h2>La vue : Angular</h2>
 <p>
-  Nous utilisons Angular pour générer la vue de l'utilisateurs.<br>
+  Nous utilisons Angular pour générer la vue de l'utilisateurs. Nous avons pu le découvrir lors des TP et voulons pousser son utilisation.<br>
+  Angular utilise du TypeScript et permet d'avoir une programmation Front-End axée autour de "component". On répartit ainsi notre interface en objets disposant d'un affichage propre.<br>
+  <br>
+  Aucun template n'a été utilisé, nous utilisons cependant des éléments de librairies permettant un affichage plus fluide.
+  Ces éléments peuvent notamment se trouver sur des sites comme : https://material.angular.io/ et https://getbootstrap.com/<br>
+  <br>
+  Voici les routes Angular auxquelles nous accédons lors du parcours de Giv'Insa<br>
+  <img src="assets/img/routeANGULAR.png">
 </p>
-  <h1>A FINIR : faire la liste des pages et composants d'Angular ! (pas la peine de décrire chaque route flask je pense)</h1>
+
+  <h1>A FINIR : intéractions entre les serveurs, AUTRES ???</h1>
+
+<h1>Organisation</h1>
+<h2>Logiciels utilisés</h2>
+<ul>
+  <li>
+    <p>
+      <b>GitHub</b><br>
+      <br>
+      GitHub est un service web d'hébergement et de gestion de développement de logiciels. <br>
+      Grâce à lui, nous avons pu au fil du projet, avoir toutes les parties de logiciel à jour et à disposition de notre groupe.<br>
+      Suivant la répartition du travail, des membres du groupes peuvent à l'aide de branches, travailler sur une même partie du projet sur deux appareils.<br>
+      Lorsqu'une version du programme est satisfaisante, la branche adéquate est chargée sur le GitHub.<br>
+      Ceci était très utilisée pour travailler à la fois sur le Front-End et sur le Back-end.
+    </p>
+  <li>
+    <p>
+      <b>JetBrains : WebStorm - PyCharm - DataGrip</b> <br>
+      <br>
+      JetBrains est une entreprise éditant des logiciels informatiques. Parmi eux, nous utiliser WebStorm, PyCharm et DataGrip<br>
+      <br>
+      WebStorm permet de gérer des langages tels que JavaScript et TypeScript qui nous intéresse ici. Il est très pratique pour structurer des projets Angular.<br>
+      PyCharm permet de gérer des programmes Python.<br>
+      DataGrip permet de gérer des bases de données SQL.<br>
+      <br>
+      Tous ces logiciels peuvent se lier à GitHub, ce qui a permis de tirer au mieux parti de ce dernier (utilisation de branches etc...). Sans devoir passer par le site de GitHub, il est possible depuis ces logiciels, de mettre à jour le programme et d'en charger tout ou partie du contenu.<br>
+    </p>
+  </li>
+  <li>
+    <p>
+      <b>Trello</b> <br>
+      <br>
+      Nous nous sommes servis de Trello comme "backlog". Nous avons listé au fur et à mesure les points techniques à mettre en place en spécifiant leur état (en cours, terminé...)<br>
+</ul>
+<h2>Spécifications</h2>
+<ul>
+  <li>
+    <p>
+      <b>Sécurité : hash</b><br>
+      <br>
+      Afin que les mots de passe ne soient pas envoyés et reçus en clair lors des intéractions Back-Front. Le mot de passe de l'utilisateur et un mot de passe spécifique au serveur sont combinés pour créer un mot de passe. C'est ce dernier qui est stocké dans la base de données. Il n'est pas possible de retrouver le mot de passe utilisateur à partir du mot de passe stocké.
+    </p>
+  </li>
+  <li>
+    <p>
+      <b>Maintien de connexion : cookies</b><br>
+      <br>
+      Sur le Front-End, nous nous servons de cookies via Angular pour garder un utilisateur actif sur les différentes pages du site. Nous stockons dans la base de données l'Id de l'utilisateur et la valeur du cookie correspondant.
+    </p>
+  </li>
+</ul>
