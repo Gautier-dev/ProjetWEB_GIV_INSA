@@ -24,12 +24,15 @@
     </form>
 
   <p>Choix de la catégorie : </p> <!--Choix de l'intérêt de l'annonce.-->
-  <form>
-    <label *ngFor="let item of interests">
-      <input [(ngModel)]="numInteret" type="radio" value="{{item.idInteret}}" [ngModelOptions]="{standalone: true}">
-      {{item.nom}}<br>
-    </label>
-  </form>
+  <mat-form-field>
+    <mat-label>{{nominteret}}</mat-label>
+    <mat-select [(ngModel)]="numInteret" size="1" name="interet">
+      <mat-option *ngFor="let item of interests" (click)="interetSelect(item.idInteret, item.nom)">
+        {{item.nom}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <p>
     Résumé :<br>
     {{titre}} : {{description}}<br>
