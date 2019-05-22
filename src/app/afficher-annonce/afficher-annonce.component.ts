@@ -9,7 +9,7 @@ export class AfficherAnnonceComponent implements OnInit {
   Annonce: JSON;
   constructor(private vueannonce: ViewAnnoncesComponent) {}
   ngOnInit() {
-    this.Annonce = this.vueannonce.annonceSelect;
+
   }
 
 
