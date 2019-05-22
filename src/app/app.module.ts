@@ -23,6 +23,7 @@ import { ManageAnnoncesComponent } from './manage-annonces/manage-annonces.compo
 import { CompteGestionComponent } from './compte-gestion/compte-gestion.component';
 import {CookieService} from 'ngx-cookie-service';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 
@@ -43,11 +44,12 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
     NgbModule,
-    BrowserAnimationsModule,
+    MatTabsModule,
     MatSidenavModule,
     MatSelectModule,
     MatButtonModule,

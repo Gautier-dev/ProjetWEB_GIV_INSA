@@ -23,16 +23,14 @@
   </mat-drawer>
   <p *ngIf="searchOK==false">Recherche</p>
   <mat-drawer-content *ngIf="searchOK==true">
-    <ngb-tabset>
-      <ngb-tab>
-        <ng-template ngbTabTitle><b>Description</b></ng-template>
-        <ng-template ngbTabContent>
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="description">
+
           <p>{{description}}</p>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab>
-        <ng-template ngbTabTitle>Details</ng-template>
-        <ng-template ngbTabContent>
+
+      </mat-tab>
+      <mat-tab label="Details">
+
           <p>{{UserAnonce}}</p>
           <p>{{echelle}}</p>
           <p *ngIf="etat === 1">
@@ -42,9 +40,9 @@
             Réservé
           </p>
 
-        </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+
+      </mat-tab>
+    </mat-tab-group>
     <button mat-stroked-button color="warn" (click)="post()">Contacter l'annonceur</button>
   </mat-drawer-content>
 </mat-drawer-container>
