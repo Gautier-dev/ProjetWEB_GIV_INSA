@@ -10,6 +10,11 @@ interface UserIdentificationResponse {
   idUser: string;
 }
 
+interface InterfaceQuartier {
+  success: boolean;
+  idQuartier: string;
+}
+
 @Component({
   selector: 'app-view-annonces',
   templateUrl: './view-annonces.component.html',
@@ -81,7 +86,7 @@ export class ViewAnnoncesComponent implements OnInit {
           this.connectStatus = true;
           this.idUser = data.idUser;
           this.interet = 0;
-          this.httpClient.get('http://127.0.0.1:5002/quartier/' + this.idUser).subscribe(data2 => {
+          this.httpClient.get<InterfaceQuartier>('http://127.0.0.1:5002/quartier/' + this.idUser).subscribe(data2 => {
             this.idQuartier = data2.idQuartier as string;
             this.httpClient.get('http://127.0.0.1:5002/interests').subscribe(data => {
               this.interets = data as [JSON];
