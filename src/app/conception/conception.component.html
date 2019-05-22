@@ -25,24 +25,6 @@
 </p>
 
 
-<h1>Fonctionnalités !!!!!!!!!!!!!!!!!!!! A COMPLETER </h1>
-<ul>
-  <li>
-    <p>
-      <b>Inscription</b>
-      <br>
-      adad
-    </p>
-  </li>
-  <li>
-    <p>
-      <b>qqchose</b>
-      <br>
-      babab
-    </p>
-  </li>
-</ul>
-
 <h1>Le modèle Modèle-Vue-Controlleur</h1>
 <h2>Le modèle : serveur MySql</h2>
 <p>
@@ -51,7 +33,11 @@
   Les tables utilisées sont en FNBC (Forme Normale de Boyce-Codd). Cela permet permet d'avoir une base de données plus efficace.<br>
 </p>
 <h3>Tables :</h3>
+<br>
+<img src="assets/img/tables.jpg">
+<br>
 <h4>Intérêts</h4>
+<img src="assets/img/tableIntérets.jpg">
 <p>
   Représente les différentes catégories que l'on peut donner à une annonce (Textile, Mobilier, Electroménager, Alimentaire, Jouets, Jeux vidéos, Décoratif, Récup ou Livres).<br>
   (<strong>idInteret</strong>,nom)<br>
@@ -61,6 +47,7 @@
     <li>nom : texte, nom de l'intérêt.</li>
 </ul>
 <h4>Quartiers</h4>
+<img src="assets/img/tableQuartiers.jpg">
 <p>
   Représente les différents quartiers avec lesquels un utilisateur peut s'inscrire, et les lie à leur arrondissement.<br>
   (<strong>idQuartier</strong>,arrondissement)<br>
@@ -70,6 +57,7 @@
   <li>arrondissement : entier, numéro de l'arrondissement associé au quartier.</li>
 </ul>
 <h4>Utilisateurs</h4>
+<img src="assets/img/tableUtilisateurs.jpg">
 <p>
   Liste les différents utilisateurs de la plateforme.<br>
   (<strong>idUser</strong>,nom,prenom,mail,telephone,idQuartier,password)<br>
@@ -84,6 +72,7 @@
   <li>password : text, hash du mot de passe de l'utilisateur.</li>
 </ul>
 <h4>Contacts</h4>
+<img src="assets/img/tableContacts.jpg">
 <p>
   Pour obtenir les informations d'un utilisateur (téléphone, mail, nom, prénom), il faut devenir son contact.<br>
   Cela se traduit à partir de cette table.<br>
@@ -100,6 +89,7 @@
   Pour retirer un contact, on retire l'entrée de la table.
 </p>
 <h4>Annonce</h4>
+<img src="assets/img/tableAnnonces.jpg">
 <p>
   Cette table recense les annonces postées par les utilisateurs.<br>
   (<strong>idAnnonce</strong>,idUser,idInteret,description,titre,echelle,etat)<br>
@@ -116,6 +106,7 @@
   A noter qu'il n'est pas nécessaire de donner l'idQuartier dans cette annonce puisque la table idUser porte l'information.
 </p>
 <h4>Cookies</h4>
+<img src="assets/img/tableCookies.jpg">
 <p>
   Cette table associe les utilisateurs aux valeurs de leurs cookies, leur permettant de garder leur session ouverte et de naviguer sur le site en étant reconnus.<br>
   (<strong>idUser</strong>,value)
@@ -140,6 +131,7 @@
   <img src="assets/img/routeFLASK.png">
 
 </p>
+<br>
 
 <h2>La vue : Angular</h2>
 <p>
@@ -150,10 +142,27 @@
   Ces éléments peuvent notamment se trouver sur des sites comme : https://material.angular.io/ et https://getbootstrap.com/<br>
   <br>
   Voici les routes Angular auxquelles nous accédons lors du parcours de Giv'Insa<br>
-  <img src="assets/img/routeANGULAR.png">
-</p>
+  <img src="assets/img/routeANGULAR.png"><br><br>
+  </p>
+<ul>
+  <li><strong>SignupComponent : </strong>ce composant permet de se connecter ou de s'inscrire. C'est aussi lui qui placera le cookie d'authentification sur l'ordinateur de l'utilisateur.</li>
+  <li><strong>UserpageComponent : </strong>ce composant présente les informations d'un utilisateur (coordonnées, etc). Elle permet la demande d'ami, ou la modification de celle-ci si cette page appartient à l'utilisateur actuel.</li>
+  <li><strong>ListeUtilisateursComponent : </strong>ce composant présente la liste des utilisateurs. Cette liste est cliquable et renvoie aux pages utilisateurs décrites précedemment.</li>
+  <li><strong>ViewAnnonceComponent : </strong>ce composant permet une vue des annonces en fonction de l'utilisateur, sa localisation en terme de quartier et l'intérêt de la recherche. L'affichage est fait de telle sorte qu'on puisse naviguer entre les recherches et passer sur la page de l'annonceur facilement.</li>
+  <li><strong>AddAnnonceComponent : </strong>ce composant permet de poster des annonces.</li>
+  <li><strong>ManageAnnonceComponent : </strong>ce composant permet de supprimer des annonces ou les marquer comme "reservées" (ou, au contraire, les repasser en "libre" en cas d'une réservation qui n'aboutirait pas).</li>
+</ul>
 
-  <h1>A FINIR : intéractions entre les serveurs, AUTRES ???</h1>
+<p>
+  <br>
+  Dans de nombreux composants, nous avons besoin de l'identifiant de l'utilisateur. Pour le récupérer, nous utilisons un cookie placé sur son ordinateur à la connexion, porteur d'un nombre aléatoire généré par le serveur flask.<br>
+  Si quelques détails concernant ce cookie seront donnés plus bas, il est important de noter que les pages ayant ce besoin d'identification récupèreront la valeur du cookie.<br>
+</p><br>
+
+<h4>On peut schématiser la communication entre les différents serveurs ainsi :</h4>
+<img src="assets/img/schemaRapport.png">
+
+<br><br><br>
 
 <h1>Organisation</h1>
 <h2>Logiciels utilisés</h2>
@@ -166,17 +175,17 @@
       Grâce à lui, nous avons pu au fil du projet, avoir toutes les parties de logiciel à jour et à disposition de notre groupe.<br>
       Suivant la répartition du travail, des membres du groupes peuvent à l'aide de branches, travailler sur une même partie du projet sur deux appareils.<br>
       Lorsqu'une version du programme est satisfaisante, la branche adéquate est chargée sur le GitHub.<br>
-      Ceci était très utilisée pour travailler à la fois sur le Front-End et sur le Back-end.
+      Ceci était très utilisé pour travailler à la fois sur le Front-End et sur le Back-end.
     </p>
   <li>
     <p>
       <b>JetBrains : WebStorm - PyCharm - DataGrip</b> <br>
       <br>
-      JetBrains est une entreprise éditant des logiciels informatiques. Parmi eux, nous utiliser WebStorm, PyCharm et DataGrip<br>
+      JetBrains est une entreprise éditant des logiciels informatiques. Parmi eux, nous utilisons WebStorm, PyCharm et DataGrip<br>
       <br>
       WebStorm permet de gérer des langages tels que JavaScript et TypeScript qui nous intéresse ici. Il est très pratique pour structurer des projets Angular.<br>
-      PyCharm permet de gérer des programmes Python.<br>
-      DataGrip permet de gérer des bases de données SQL.<br>
+      PyCharm permet de créer des programmes Python.<br>
+      DataGrip permet de gérer des bases de données SQL, y définir des clés et y insérer des données facilement. Il nous aura grandement aidé notamment pour construire les fondements de notre base (quartiers, etc).<br>
       <br>
       Tous ces logiciels peuvent se lier à GitHub, ce qui a permis de tirer au mieux parti de ce dernier (utilisation de branches etc...). Sans devoir passer par le site de GitHub, il est possible depuis ces logiciels, de mettre à jour le programme et d'en charger tout ou partie du contenu.<br>
     </p>
@@ -200,7 +209,18 @@
     <p>
       <b>Maintien de connexion : cookies</b><br>
       <br>
-      Sur le Front-End, nous nous servons de cookies via Angular pour garder un utilisateur actif sur les différentes pages du site. Nous stockons dans la base de données l'Id de l'utilisateur et la valeur du cookie correspondant.
+      Sur le Front-End, nous nous servons de cookies via Angular pour garder un utilisateur actif sur les différentes pages du site. Nous stockons dans la base de données l'Id de l'utilisateur et la valeur du cookie correspondant, valeur générée aléatoirement par le serveur Flask.<br>
+      Se connecter sur un autre navigateur changera la valeur de ce nombre dans la base de données, ainsi, si l'utilisateur s'est mal déconnecté d'un ordinateur ne lui appartenant pas, d'autres ne pourront pas utiliser son compte.<br>
+      La valeur du cookie est définie aléatoirement. En réalité, cette protection est insuffisante car très faible : il suffirait de tenter un grand nombre de valeurs (il n'y en a pas tellement) pour finalement tomber sur tous les comptes utilisateurs que l'on voudrait pouvoir contrôler.<br>
+      Il s'agit néanmoins du concept qui nous permet de nous identifier correctement.
     </p>
   </li>
+</ul>
+<h1>Perspectives d'améliorations</h1>
+<p>Si nous devions continuer sur ce projet, voici ce sur quoi nous travaillerions :</p>
+<ul>
+  <li><strong>Nous chercherions à rendre le site plus rapide.</strong><br>En effet, de nombreux ralentissements ont lieu, et sont partiellement dus à un trop grande nombre de requêtes au serveur Flask concernant l'identification de l'utilisateur à l'aide du cookies qui a lieu à presque chaque changement de page
+  Il serait intéressant de créer un service permettant cette authentification, et de reconstruire le site afin d'économiser des requêtes.</li>
+  <li><strong>Nous travaillerions à une meilleure sécurité.</strong><br>Les cookies sont assez triviaux, il serait intéressant de chercher d'autres mécanismes de sécurité plus complexes.</li>
+  <li><strong>Enfin, nous tenterions d'apporter un meilleur aspect esthétique.</strong><br>Le site manque d'ergonomie par endroits.</li>
 </ul>
