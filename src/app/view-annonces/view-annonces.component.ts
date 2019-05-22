@@ -24,14 +24,12 @@ export class ViewAnnoncesComponent implements OnInit {
 
   // Paramètres de visionnage :
   idQuartier: string;
-  arrondissement: 3;
-
   interet: number; // Valeur à 0 : "peu importe"
   interets: [JSON];
   nominteret: 'type';
   annonces: [JSON];
   idAnnonce: 0;
-  UserAnonce: string;
+  UserAnnonce: string;
   idInteret: number;
   description: string;
   titre: string;
@@ -41,7 +39,7 @@ export class ViewAnnoncesComponent implements OnInit {
   connectStatus: boolean;
   searchOK = false;
   bouton = false;
-
+  opened: boolean;
   constructor(private httpClient: HttpClient, private router: Router, private location: Location, private cookieService: CookieService) { }
 
   search() {
@@ -53,7 +51,7 @@ export class ViewAnnoncesComponent implements OnInit {
 
   annonce(annonce) {
     this.idAnnonce = annonce.idAnnonce;
-    this.UserAnonce = annonce.idUser;
+    this.UserAnnonce = annonce.idUser;
     this.idInteret = annonce.idInteret;
     this.description = annonce.description;
     this.titre = annonce.titre;
