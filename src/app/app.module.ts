@@ -24,6 +24,7 @@ import { CompteGestionComponent } from './compte-gestion/compte-gestion.componen
 import {CookieService} from 'ngx-cookie-service';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatListModule} from '@angular/material/list';
 
 
 
@@ -53,6 +54,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSidenavModule,
     MatSelectModule,
     MatButtonModule,
+    MatListModule
 
   ],
   providers: [CookieService],

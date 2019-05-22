@@ -11,18 +11,16 @@
 </mat-form-field>
 <button mat-stroked-button color="warn" (click)="search()">Chercher les annonces chaudes de ta région</button>
 
-<mat-drawer-container class="example-container">
+<mat-drawer-container class="example-container"  *ngIf="searchOK==true">
   <mat-drawer mode="side" opened>
-    <p *ngIf="searchOK==false">Recherche</p>
-    <div class="list-group" *ngIf="searchOK==true">
-      <button *ngFor="let annonce2 of annonces" type="button" (click)="annonce(annonce2)" class="list-group-item list-group-item-action">
+    <mat-list role="list">
+      <mat-list-item role="listitem" *ngFor="let annonce2 of annonces" >
+      <button mat-button (click)="annonce(annonce2)">
         {{annonce2.titre}}</button>
-    </div>
-
-
+      </mat-list-item>
+    </mat-list>
   </mat-drawer>
-  <p *ngIf="searchOK==false">Recherche</p>
-  <mat-drawer-content *ngIf="searchOK==true">
+  <mat-drawer-content>
     <mat-tab-group animationDuration="0ms">
       <mat-tab label="description">
 
