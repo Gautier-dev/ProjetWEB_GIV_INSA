@@ -126,27 +126,28 @@ export class SignupComponent implements OnInit {
         // Efface les champs de mdp
         (document.getElementById('psw') as HTMLInputElement).value = '';
         (document.getElementById('psw-repeat') as HTMLInputElement).value = '';
+      } else {
+        const data = {
+          idUser: pseudo,
+          mail: email,
+          password: psw,
+          idQuartier: this.quartier,
+        };
+        this.httpClient.post('http://127.0.0.1:5002/signup', data, this.httpOptions).subscribe(res => {
+          this.registerStatus = res as boolean;
+          switch (this.registerStatus) {
+            case true: {
+              (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Inscription réussie';
+              break;
+            }
+            case false: {
+              // tslint:disable-next-line:max-line-length
+              (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'L\'inscription n\'a pas abouti : vos identifiants sont déjà utilisés.';
+              break;
+            }
+          }
+        });
       }
-      const data = {
-        idUser: pseudo,
-        mail: email,
-        password: psw,
-        idQuartier: this.quartier,
-      };
-      this.httpClient.post('http://127.0.0.1:5002/signup', data, this.httpOptions).subscribe(res => {
-        this.registerStatus = res as boolean;
-        switch (this.registerStatus) {
-          case true: {
-            (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'Inscription réussie';
-            break;
-          }
-          case false: {
-            // tslint:disable-next-line:max-line-length
-            (document.getElementById('pswerror') as HTMLInputElement).innerHTML = 'L\'inscription n\'a pas abouti : vos identifiants sont déjà utilisés.';
-            break;
-          }
-        }
-      });
     }
   }
 }

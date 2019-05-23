@@ -80,16 +80,15 @@ def loginForm(db, form):
 
         password = form['password']
         cur = db.query("SELECT password FROM utilisateurs WHERE idUser = %s", [idUser])  # On récupère le mot de passe.
-
         for row in cur.fetchall():
-            if bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(10)) == row['password']:
-                session['idUser'] = form['idUser']  # on associe idUser a sa valeur dans une session, si la session est modifiee session.modified = True
-            return error
+            print(row)
+            if bcrypt.checkpw(password.encode('utf-8'), row['password'].encode('utf-8')):
+                return True
+            return False
 
         raise ServerError('Incorrect username / password')
     except ServerError as e:
-        error = str(e)
-        return error
+        return False
 
 
 #DEFINITION DES DIFFERENTES CLASSES POUR L'ACCES A LA BASE DE DONNEES
@@ -196,8 +195,8 @@ class Login(Resource):
     """
     db = Database()
     form = request.get_json()
-    result = loginForm(db, form) #On a un resultat SSI il y a eu une erreur
-    if not result:
+    result = loginForm(db, form) #True si connexion réussie, False sinon
+    if result:
         cookieValue = randint(100,10000000)
         response = {'success' : True, 'cookieValue' : str(cookieValue)}
         # Insertion de la valeur du cookie dans la base de données
